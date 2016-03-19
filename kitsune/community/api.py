@@ -52,7 +52,7 @@ class TopContributorsBase(views.APIView):
         for key, value in self.query_values.items():
             filter_method = getattr(self, 'filter_' + key, None)
             if filter_method is None:
-                self.warnings.append('Unknown filter {}'.format(key))
+                self.warnings.append('Unknown filter {0}'.format(key))
             else:
                 f &= filter_method(value)
 
@@ -97,7 +97,7 @@ class TopContributorsBase(views.APIView):
     def filter_ordering(self, value):
         """Validate sort order, but don't return any filters."""
         if value not in self.get_allowed_orderings():
-            self.warnings.append('Invalid sort order: {}'.format(value))
+            self.warnings.append('Invalid sort order: {0}'.format(value))
 
         return F()
 

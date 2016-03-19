@@ -44,7 +44,7 @@ def _send_simple_push(endpoint, version):
     Handles and record any HTTP errors.
     """
     try:
-        r = requests.put(endpoint, 'version={}'.format(version))
+        r = requests.put(endpoint, 'version={0}'.format(version))
         # If something does wrong, the SimplePush server will give back
         # json encoded error messages.
         if r.status_code != 200:

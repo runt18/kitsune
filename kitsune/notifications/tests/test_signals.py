@@ -87,7 +87,7 @@ class TestSimplePushNotifier(TestCase):
         url = 'http://example.com/simple_push/asdf'
         PushNotificationRegistration.objects.create(creator=u, push_url=url)
         n = notification(owner=u, save=True)
-        requests.put.assert_called_once_with(url, 'version={}'.format(n.id))
+        requests.put.assert_called_once_with(url, 'version={0}'.format(n.id))
 
     def test_simple_push_not_sent(self, requests):
         """Verify that no request is made when there is no SimplePush registration."""
@@ -108,7 +108,7 @@ class TestSimplePushNotifier(TestCase):
         action.send(profile().user, verb='looked at funny', action_object=q)
         n = Notification.objects.get(owner=u)
         # Assert that they got notified.
-        requests.put.assert_called_once_with(url, 'version={}'.format(n.id))
+        requests.put.assert_called_once_with(url, 'version={0}'.format(n.id))
 
     def test_from_action_to_realtime_notification(self, requests):
         """
@@ -126,4 +126,4 @@ class TestSimplePushNotifier(TestCase):
         action.send(profile().user, verb='looked at funny', action_object=q)
         a = Action.objects.order_by('-id')[0]
         # Assert that they got notified.
-        requests.put.assert_called_once_with(url, 'version={}'.format(a.id))
+        requests.put.assert_called_once_with(url, 'version={0}'.format(a.id))

@@ -126,7 +126,7 @@ class Profile(ModelBase, SearchMixin):
         elif serializer_type == 'fk':
             return api.ProfileFKSerializer
         else:
-            raise ValueError('Unknown serializer type "{}".'.format(serializer_type))
+            raise ValueError('Unknown serializer type "{0}".'.format(serializer_type))
 
     @property
     def last_contribution_date(self):

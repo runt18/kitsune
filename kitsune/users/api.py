@@ -307,7 +307,7 @@ class ProfileViewSet(mixins.CreateModelMixin,
             digits = random.randint(100, 10000)
             if digits in self.number_blacklist:
                 continue
-            username = 'buddy{}'.format(digits)
+            username = 'buddy{0}'.format(digits)
             # Check if it is taken yet.
             if not User.objects.filter(username=username).exists():
                 break

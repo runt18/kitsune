@@ -24,13 +24,13 @@ class DocumentFactory(factory.DjangoModelFactory):
         model = Document
 
     category = CATEGORIES[0][0]
-    title = factory.Sequence(lambda n: u'đoc-{}'.format(n))
+    title = factory.Sequence(lambda n: u'đoc-{0}'.format(n))
     slug = factory.LazyAttribute(lambda o: slugify(o.title))
 
 
 class TemplateDocumentFactory(DocumentFactory):
     category = TEMPLATES_CATEGORY
-    title = factory.Sequence(lambda n: u'{}:τmpl-{}'.format(TEMPLATE_TITLE_PREFIX, n))
+    title = factory.Sequence(lambda n: u'{0}:τmpl-{1}'.format(TEMPLATE_TITLE_PREFIX, n))
 
 
 class RevisionFactory(factory.DjangoModelFactory):

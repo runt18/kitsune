@@ -323,7 +323,7 @@ class TestUserView(TestCase):
         # There is at least one user in existence due to migrations
         number_users = User.objects.count()
 
-        username = 'kris-{}'.format(random())
+        username = 'kris-{0}'.format(random())
         url = reverse('user-list')
         res = self.client.post(url, {
             'username': username,
@@ -339,7 +339,7 @@ class TestUserView(TestCase):
         eq_(u.is_active, False)
 
     def test_invalid_email(self):
-        username = 'sarah-{}'.format(random())
+        username = 'sarah-{0}'.format(random())
         url = reverse('user-list')
         res = self.client.post(url, {
             'username': username,
