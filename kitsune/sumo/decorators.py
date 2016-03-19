@@ -73,8 +73,10 @@ def json_view(f):
     return _wrapped
 
 
-def cors_enabled(origin, methods=['GET']):
+def cors_enabled(origin, methods=None):
     """A simple decorator to enable CORS."""
+    if methods is None:
+        methods = ['GET']
     def decorator(f):
         @wraps(f)
         def decorated_func(request, *args, **kwargs):
@@ -115,12 +117,14 @@ def timeit(f):
     return _timeit
 
 
-def ratelimit(name, rate, method=['POST'], skip_if=lambda r: False):
+def ratelimit(name, rate, method=None, skip_if=lambda r: False):
     """
     Reimplement ``ratelimit.decorators.ratelimit``, using a sumo-specic ``is_ratelimited``.
 
     This discards a lot of the flexibility of the original, and in turn is a lot simpler.
     """
+    if method is None:
+        method = ['POST']
     def _decorator(fn):
         @wraps(fn)
         def _wrapped(request, *args, **kwargs):

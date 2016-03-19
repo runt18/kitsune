@@ -21,7 +21,9 @@ from kitsune.sumo.urlresolvers import reverse
 from kitsune.users.tests import profile
 
 
-def render(s, context={}):
+def render(s, context=None):
+    if context is None:
+        context = {}
     t = jingo.env.from_string(s)
     return t.render(**context)
 

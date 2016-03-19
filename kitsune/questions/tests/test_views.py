@@ -322,7 +322,9 @@ class TestQuestionUpdates(TestCaseBase):
         self.u.delete()
         self.q.delete()
 
-    def _request_and_no_update(self, url, req_type='POST', data={}):
+    def _request_and_no_update(self, url, req_type='POST', data=None):
+        if data is None:
+            data = {}
         updated = self.q.updated
 
         if req_type == 'POST':

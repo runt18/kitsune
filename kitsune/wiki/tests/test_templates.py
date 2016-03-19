@@ -2710,7 +2710,11 @@ class RecentRevisionsTest(TestCaseBase):
 # TODO: Merge with wiki.tests.doc_rev()?
 def _create_document(title='Test Document', parent=None,
                      locale=settings.WIKI_DEFAULT_LANGUAGE,
-                     doc_kwargs={}, rev_kwargs={}):
+                     doc_kwargs=None, rev_kwargs=None):
+    if doc_kwargs is None:
+        doc_kwargs = {}
+    if rev_kwargs is None:
+        rev_kwargs = {}
     d = document(title=title, html='<div>Lorem Ipsum</div>',
                  category=TROUBLESHOOTING_CATEGORY, locale=locale,
                  parent=parent, is_localizable=True, **doc_kwargs)
