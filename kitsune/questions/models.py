@@ -390,7 +390,7 @@ class Question(ModelBase, BigVocabTaggableMixin, SearchMixin):
         elif serializer_type == 'fk':
             return api.QuestionFKSerializer
         else:
-            raise ValueError('Unknown serializer type "{}".'.format(serializer_type))
+            raise ValueError('Unknown serializer type "{0}".'.format(serializer_type))
 
     @classmethod
     def recent_asked_count(cls, extra_filter=None):
@@ -1134,7 +1134,7 @@ class Answer(ModelBase, SearchMixin):
         elif serializer_type == 'fk':
             return api.AnswerFKSerializer
         else:
-            raise ValueError('Unknown serializer type "{}".'.format(serializer_type))
+            raise ValueError('Unknown serializer type "{0}".'.format(serializer_type))
 
     def mark_as_spam(self, by_user):
         """Mark the answer as spam by the specified user."""

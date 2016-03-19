@@ -20,8 +20,8 @@ class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = User
 
-    username = factory.Sequence(lambda n: 'test-user-{}'.format(n))
-    email = factory.LazyAttribute(lambda u: '{}@example.com'.format(u.username))
+    username = factory.Sequence(lambda n: 'test-user-{0}'.format(n))
+    email = factory.LazyAttribute(lambda u: '{0}@example.com'.format(u.username))
     password = factory.PostGenerationMethodCall('set_password', 'testpass')
 
     @factory.post_generation
@@ -35,7 +35,7 @@ class ProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = Profile
 
-    name = factory.Sequence(lambda n: 'Test K. User {}'.format(n))
+    name = factory.Sequence(lambda n: 'Test K. User {0}'.format(n))
     bio = 'Some bio.'
     website = 'http://support.example.com'
     timezone = None
