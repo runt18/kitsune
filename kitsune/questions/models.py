@@ -754,8 +754,8 @@ class QuestionMappingType(SearchMappingType):
             model = cls.get_model()
             obj = model.objects.values(*all_fields).get(pk=obj_id)
         else:
-            fixed_obj = dict([(field, getattr(obj, field))
-                              for field in fields])
+            fixed_obj = {field: getattr(obj, field)
+                              for field in fields}
             fixed_obj['creator__username'] = obj.creator.username
             obj = fixed_obj
 
@@ -1193,8 +1193,8 @@ class AnswerMetricsMappingType(SearchMappingType):
             model = cls.get_model()
             obj_dict = model.objects.values(*all_fields).get(pk=obj_id)
         else:
-            obj_dict = dict([(field, getattr(obj, field))
-                             for field in fields])
+            obj_dict = {field: getattr(obj, field)
+                             for field in fields}
             obj_dict['question__locale'] = obj.question.locale
             obj_dict['question__solution_id'] = obj.question.solution_id
             obj_dict['question__creator_id'] = obj.question.creator_id

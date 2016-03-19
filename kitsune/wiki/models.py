@@ -1054,8 +1054,8 @@ class RevisionMetricsMappingType(SearchMappingType):
             model = cls.get_model()
             obj_dict = model.objects.values(*all_fields).get(pk=obj_id)
         else:
-            obj_dict = dict([(field, getattr(obj, field))
-                             for field in fields])
+            obj_dict = {field: getattr(obj, field)
+                             for field in fields}
             obj_dict['document__locale'] = obj.document.locale
             obj_dict['document__slug'] = obj.document.slug
 

@@ -294,8 +294,7 @@ def index_view(request):
     last_20_by_bucket = None
     data = None
 
-    bucket_to_model = dict(
-        [(cls.get_mapping_type_name(), cls) for cls in get_mapping_types()])
+    bucket_to_model = {cls.get_mapping_type_name(): cls for cls in get_mapping_types()}
 
     if requested_bucket and requested_id:
         # Nix whitespace because I keep accidentally picking up spaces

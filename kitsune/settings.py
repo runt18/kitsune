@@ -221,10 +221,10 @@ LANGUAGE_CHOICES = tuple(
 LANGUAGE_CHOICES_ENGLISH = tuple(
     [(lang, LOCALES[lang].english) for lang in SUMO_LANGUAGES
      if lang != 'xx'])
-LANGUAGES_DICT = dict([(i.lower(), LOCALES[i].native) for i in SUMO_LANGUAGES])
+LANGUAGES_DICT = {i.lower(): LOCALES[i].native for i in SUMO_LANGUAGES}
 LANGUAGES = LANGUAGES_DICT.items()
 
-LANGUAGE_URL_MAP = dict([(i.lower(), i) for i in SUMO_LANGUAGES])
+LANGUAGE_URL_MAP = {i.lower(): i for i in SUMO_LANGUAGES}
 
 # Locales that are known but unsupported. Keys are the locale, values
 # are an optional fallback locale, or None, to use the LANGUAGE_CODE.
