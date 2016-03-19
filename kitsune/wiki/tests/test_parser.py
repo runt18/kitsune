@@ -121,7 +121,7 @@ class SimpleSyntaxTestCase(TestCase):
         p = WikiParser()
         tags = ['menu', 'button', 'filepath', 'pref']
         for tag in tags:
-            doc = pq(p.parse('{%s this is a %s}' % (tag, tag)))
+            doc = pq(p.parse('{{{0!s} this is a {1!s}}}'.format(tag, tag)))
             eq_('this is a ' + tag, doc('span.' + tag).text())
 
     def test_general_warning_note_inline_custom(self):
@@ -169,10 +169,10 @@ class SimpleSyntaxTestCase(TestCase):
         redirect = Document.objects.get(slug=old_slug)
 
         # Both internal links should link to the same article
-        eq_(p.parse('[[%s]]' % doc.title),
-            '<p><a href="/en-US/kb/%s">%s</a>\n</p>' % (doc.slug, doc.title))
-        eq_(p.parse('[[%s]]' % redirect.title),
-            '<p><a href="/en-US/kb/%s">%s</a>\n</p>' % (doc.slug, doc.title))
+        eq_(p.parse('[[{0!s}]]'.format(doc.title)),
+            '<p><a href="/en-US/kb/{0!s}">{1!s}</a>\n</p>'.format(doc.slug, doc.title))
+        eq_(p.parse('[[{0!s}]]'.format(redirect.title)),
+            '<p><a href="/en-US/kb/{0!s}">{1!s}</a>\n</p>'.format(doc.slug, doc.title))
 
 
 class TestWikiTemplate(TestCase):
@@ -347,7 +347,7 @@ class TestWikiTemplate(TestCase):
             revision(document=d, content='Fine [[Template:Boo]] Fellows',
                      is_approved=True).save()
 
-        eq_('<p>Fine %s Fellows\n</p>' % (RECURSION_MESSAGE % 'Template:Boo'),
+        eq_('<p>Fine {0!s} Fellows\n</p>'.format((RECURSION_MESSAGE % 'Template:Boo')),
             d.content_parsed)
 
     def test_indirect_recursion(self):
@@ -361,7 +361,7 @@ class TestWikiTemplate(TestCase):
         revision(document=yah, content='Wooden [[Template:Boo]] Bats',
                  is_approved=True).save()
         recursion_message = RECURSION_MESSAGE % 'Template:Boo'
-        eq_('<p>Paper Wooden %s Bats\n Cups\n</p>' % recursion_message,
+        eq_('<p>Paper Wooden {0!s} Bats\n Cups\n</p>'.format(recursion_message),
             boo.content_parsed)
 
 
@@ -408,7 +408,7 @@ class TestWikiInclude(TestCase):
             revision(document=d, content='Fine [[Include:Boo]] Fellows',
                      is_approved=True).save()
 
-        eq_('<p>Fine %s Fellows\n</p>' % (RECURSION_MESSAGE % 'Boo'),
+        eq_('<p>Fine {0!s} Fellows\n</p>'.format((RECURSION_MESSAGE % 'Boo')),
             d.content_parsed)
 
     def test_indirect_recursion(self):
@@ -425,7 +425,7 @@ class TestWikiInclude(TestCase):
 
         # boo.content_parsed is something like <p>Paper </p><p>Wooden
         # [Recursive inclusion of "Boo"] Bats\n</p> Cups\n<p></p>.
-        eq_('Paper Wooden %s Bats Cups' % recursion_message,
+        eq_('Paper Wooden {0!s} Bats Cups'.format(recursion_message),
             re.sub(r'</?p>|\n', '', boo.content_parsed))
 
 
@@ -487,8 +487,8 @@ class TestWikiVideo(TestCase):
     def test_video_modal(self):
         """Video modal defaults for plcaeholder and text."""
         v = video()
-        replacement = ('<img class="video-thumbnail" src="%s"/>' %
-                       v.thumbnail_url_if_set())
+        replacement = ('<img class="video-thumbnail" src="{0!s}"/>'.format(
+                       v.thumbnail_url_if_set()))
         d, _, p = doc_rev_parser(
             '[[V:Some title|modal]]')
         doc = pq(d.html)
@@ -530,7 +530,7 @@ class TestWikiVideo(TestCase):
         parser = WikiParser()
 
         for url in urls:
-            doc = pq(parser.parse('[[V:%s]]' % url))
+            doc = pq(parser.parse('[[V:{0!s}]]'.format(url)))
             assert doc('iframe')[0].attrib['src'].startswith(
                 '//www.youtube.com/embed/oHg5SJYRHA0')
 

@@ -57,7 +57,7 @@ def build_paged_url(request):
 
     qsa = urlencode(items)
 
-    return u'%s?%s' % (base, qsa)
+    return u'{0!s}?{1!s}'.format(base, qsa)
 
 
 # By Ned Batchelder.
@@ -183,7 +183,7 @@ def user_or_ip(key_prefix):
         else:
             key = request.META.get('HTTP_X_CLUSTER_CLIENT_IP',
                                    request.META['REMOTE_ADDR'])
-        return 'uip:%s:%s' % (key_prefix, key)
+        return 'uip:{0!s}:{1!s}'.format(key_prefix, key)
 
     return _user_or_ip
 

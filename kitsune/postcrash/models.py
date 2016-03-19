@@ -9,7 +9,7 @@ class Signature(ModelBase):
     document = models.ForeignKey(Document)
 
     def __unicode__(self):
-        return u'<%s> %s' % (self.signature, self.document.title)
+        return u'<{0!s}> {1!s}'.format(self.signature, self.document.title)
 
     def get_absolute_url(self):
         doc = self.document.get_absolute_url().lstrip('/')

@@ -24,7 +24,7 @@ def run():
         # to the documents.
         for product in products:
             print '=========================================================='
-            print '[%s] %s' % (product, old_topic.title)
+            print '[{0!s}] {1!s}'.format(product, old_topic.title)
             print '=========================================================='
             try:
                 topic = Topic.objects.get(

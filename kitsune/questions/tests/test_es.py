@@ -21,7 +21,7 @@ class QuestionUpdateTests(ElasticTestCase):
         # Create a question--that adds one document to the index.
         q = question(title=u'Does this test work?', save=True)
         self.refresh()
-        query = dict(('%s__match' % field, 'test')
+        query = dict(('{0!s}__match'.format(field), 'test')
                      for field in QuestionMappingType.get_query_fields())
         eq_(search.query(should=True, **query).count(), 1)
 
@@ -30,13 +30,13 @@ class QuestionUpdateTests(ElasticTestCase):
         a = answer(content=u'There\'s only one way to find out!',
                    question=q)
         self.refresh()
-        query = dict(('%s__match' % field, 'only')
+        query = dict(('{0!s}__match'.format(field), 'only')
                      for field in QuestionMappingType.get_query_fields())
         eq_(search.query(should=True, **query).count(), 0)
 
         a.save()
         self.refresh()
-        query = dict(('%s__match' % field, 'only')
+        query = dict(('{0!s}__match'.format(field), 'only')
                      for field in QuestionMappingType.get_query_fields())
         eq_(search.query(should=True, **query).count(), 1)
 

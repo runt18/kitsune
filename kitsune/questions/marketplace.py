@@ -63,7 +63,7 @@ def submit_ticket(email, category, subject, body, tags):
         ticket_url = zendesk.create_ticket(data=new_ticket)
         statsd.incr('questions.zendesk.success')
     except ZendeskError as e:
-        log.error('Zendesk error: %s' % e.msg)
+        log.error('Zendesk error: {0!s}'.format(e.msg))
         statsd.incr('questions.zendesk.error')
         raise
 

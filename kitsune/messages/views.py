@@ -132,7 +132,7 @@ def bulk_action(request, msgtype='inbox'):
                                                    to=request.user)
             messages.update(read=False)
 
-    return redirect('messages.%s' % msgtype)
+    return redirect('messages.{0!s}'.format(msgtype))
 
 
 @login_required

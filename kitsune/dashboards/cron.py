@@ -270,8 +270,7 @@ def cache_most_unhelpful_kb_articles():
 
     for entry in sorted_final:
         doc = Document.objects.get(pk=entry[0])
-        redis.rpush(REDIS_KEY, (u'%s::%s::%s::%s::%s::%s::%s' %
-                                (entry[0],  # Document ID
+        redis.rpush(REDIS_KEY, (u'{0!s}::{1!s}::{2!s}::{3!s}::{4!s}::{5!s}::{6!s}'.format(entry[0],  # Document ID
                                  entry[1],  # Total Votes
                                  entry[2],  # Current Percentage
                                  entry[3],  # Difference in Percentage

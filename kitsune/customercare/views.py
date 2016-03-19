@@ -141,7 +141,7 @@ def landing(request):
         redis = redis_client(name='default')
     except RedisError as e:
         statsd.incr('redis.errror')
-        log.error('Redis error: %s' % e)
+        log.error('Redis error: {0!s}'.format(e))
 
     contributor_stats = redis and redis.get(settings.CC_TOP_CONTRIB_CACHE_KEY)
     if contributor_stats:

@@ -162,7 +162,7 @@ MAX_RETRIES = len(RETRY_TIMES)
 @timeit
 def index_task(cls, id_list, **kw):
     """Index documents specified by cls and ids"""
-    statsd.incr('search.tasks.index_task.%s' % cls.get_mapping_type_name())
+    statsd.incr('search.tasks.index_task.{0!s}'.format(cls.get_mapping_type_name()))
     try:
         # Pin to master db to avoid replication lag issues and stale
         # data.
@@ -186,7 +186,7 @@ def index_task(cls, id_list, **kw):
             raise IndexingTaskError()
 
         statsd.incr('search.tasks.index_task.retry', 1)
-        statsd.incr('search.tasks.index_task.retry%d' % RETRY_TIMES[retries],
+        statsd.incr('search.tasks.index_task.retry{0:d}'.format(RETRY_TIMES[retries]),
                     1)
 
         index_task.retry(exc=exc, max_retries=MAX_RETRIES,
@@ -199,7 +199,7 @@ def index_task(cls, id_list, **kw):
 @timeit
 def unindex_task(cls, id_list, **kw):
     """Unindex documents specified by cls and ids"""
-    statsd.incr('search.tasks.unindex_task.%s' % cls.get_mapping_type_name())
+    statsd.incr('search.tasks.unindex_task.{0!s}'.format(cls.get_mapping_type_name()))
     try:
         # Pin to master db to avoid replication lag issues and stale
         # data.
@@ -214,7 +214,7 @@ def unindex_task(cls, id_list, **kw):
             raise IndexingTaskError()
 
         statsd.incr('search.tasks.unindex_task.retry', 1)
-        statsd.incr('search.tasks.unindex_task.retry%d' % RETRY_TIMES[retries],
+        statsd.incr('search.tasks.unindex_task.retry{0:d}'.format(RETRY_TIMES[retries]),
                     1)
 
         unindex_task.retry(exc=exc, max_retries=MAX_RETRIES,

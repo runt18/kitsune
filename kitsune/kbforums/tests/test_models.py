@@ -24,7 +24,7 @@ class KBForumModelTestCase(KBForumTestCase):
         url_ = reverse('wiki.discuss.posts',
                        locale=p.thread.document.locale,
                        args=[p.thread.document.slug, p.thread.id])
-        exp_ = urlparams(url_, hash='post-%s' % p.id)
+        exp_ = urlparams(url_, hash='post-{0!s}'.format(p.id))
         eq_(exp_, p.get_absolute_url())
 
     def test_last_post_updated(self):
@@ -76,7 +76,7 @@ class KBSaveDateTestCase(KBForumTestCase):
         Assert that two datetime objects are within `range` (a timedelta).
         """
         diff = abs(a - b)
-        assert diff < abs(delta), msg or '%s ~= %s' % (a, b)
+        assert diff < abs(delta), msg or '{0!s} ~= {1!s}'.format(a, b)
 
     def test_save_thread_no_created(self):
         """Saving a new thread should behave as if auto_add_now was set."""

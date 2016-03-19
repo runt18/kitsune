@@ -20,7 +20,7 @@ tags_to_migrate = {
 
 
 def assert_equals(a, b):
-    assert a == b, '%s != %s' % (a, b)
+    assert a == b, '{0!s} != {1!s}'.format(a, b)
 
 
 def run():
@@ -39,8 +39,8 @@ def run():
 
                 doc.products.add(product)
 
-                print 'Added product "%s" to document "%s"' % (
+                print 'Added product "{0!s}" to document "{1!s}"'.format(
                     smart_str(product.slug), smart_str(doc.title))
                 total_affected += 1
 
-    print 'Done! (%d)' % total_affected
+    print 'Done! ({0:d})'.format(total_affected)

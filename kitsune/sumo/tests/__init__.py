@@ -79,7 +79,7 @@ def attrs_eq(received, **expected):
 
 def starts_with(text, substring):
     """Assert `text` starts with `substring`."""
-    assert text.startswith(substring), "%r doesn't start with %r" % (text,
+    assert text.startswith(substring), "{0!r} doesn't start with {1!r}".format(text,
                                                                      substring)
 
 
@@ -107,7 +107,7 @@ class LocalizingClient(Client):
         path = request.get('PATH_INFO', self.defaults.get('PATH_INFO', '/'))
         locale, shortened = split_path(path)
         if not locale:
-            request['PATH_INFO'] = '/%s/%s' % (settings.LANGUAGE_CODE,
+            request['PATH_INFO'] = '/{0!s}/{1!s}'.format(settings.LANGUAGE_CODE,
                                                shortened)
         return super(LocalizingClient, self).request(**request)
 
@@ -134,8 +134,7 @@ class MigrationTests(TestCase):
             if match:
                 number = match.group()
                 if number in seen_numbers:
-                    self.fail('There is more than one migration #%s in %s.' %
-                              (number, path))
+                    self.fail('There is more than one migration #{0!s} in {1!s}.'.format(number, path))
                 seen_numbers.add(number)
 
     def test_innodb_and_utf8(self):
@@ -228,4 +227,4 @@ def with_save(func):
 def eq_msg(a, b, msg=None):
     """Shorthand for 'assert a == b, "%s %r != %r" % (msg, a, b)'
     """
-    assert a == b, (str(msg) or '') + ' (%r != %r)' % (a, b)
+    assert a == b, (str(msg) or '') + ' ({0!r} != {1!r})'.format(a, b)

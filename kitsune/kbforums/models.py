@@ -147,7 +147,7 @@ class Post(ModelBase):
                        locale=self.thread.document.locale,
                        kwargs={'document_slug': self.thread.document.slug,
                                'thread_id': self.thread.id})
-        return urlparams(url_, hash='post-%s' % self.id, **query)
+        return urlparams(url_, hash='post-{0!s}'.format(self.id), **query)
 
     @property
     def content_parsed(self):

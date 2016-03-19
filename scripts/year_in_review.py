@@ -205,7 +205,7 @@ def bugzilla_stats(year):
     # -------------------------------------------
     bugs = bugzilla.get_bugs(
         product=PRODUCTS,
-        creation_time='%s-01-01' % year,
+        creation_time='{0!s}-01-01'.format(year),
         include_fields=['id', 'creator', 'creation_time'],
         history=False,
         comments=False)
@@ -235,7 +235,7 @@ def bugzilla_stats(year):
     # -------------------------------------------
     bugs = bugzilla.get_bugs(
         product=PRODUCTS,
-        last_change_time='%s-01-01' % year,
+        last_change_time='{0!s}-01-01'.format(year),
         include_fields=['id', 'summary', 'assigned_to', 'last_change_time', 'resolution'],
         status=['RESOLVED', 'VERIFIED', 'CLOSED'],
         history=True,
@@ -342,8 +342,8 @@ def git_stats(year):
     # Get the shas for all the commits we're going to look at.
     all_commits = subprocess.check_output([
         'git', 'log',
-        '--after=%s-01-01' % year,
-        '--before=%s-01-01' % (int(year) + 1),
+        '--after={0!s}-01-01'.format(year),
+        '--before={0!s}-01-01'.format((int(year) + 1)),
         '--format=%H'
     ])
 

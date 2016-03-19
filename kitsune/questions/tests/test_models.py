@@ -130,7 +130,7 @@ class TestAnswer(TestCaseBase):
         a1.save()
         a2.delete()
         a3 = Answer.objects.filter(question=a1.question)[0]
-        assert a3.page == 1, "Page was %s" % a3.page
+        assert a3.page == 1, "Page was {0!s}".format(a3.page)
 
     def test_creator_num_answers(self):
         a = answer(save=True)
@@ -157,9 +157,9 @@ class TestAnswer(TestCaseBase):
         doc.save()
 
         q = question(locale='es', save=True)
-        a = answer(question=q, content='[[%s]]' % doc.title, save=True)
+        a = answer(question=q, content='[[{0!s}]]'.format(doc.title), save=True)
 
-        assert 'es/kb/%s' % doc.slug in a.content_parsed
+        assert 'es/kb/{0!s}'.format(doc.slug) in a.content_parsed
 
     def test_creator_follows(self):
         a = answer(save=True)
@@ -372,9 +372,9 @@ class QuestionTests(TestCaseBase):
         """Verify question returned from valid URL."""
         q = question(save=True)
 
-        eq_(q, Question.from_url('/en-US/questions/%s' % q.id))
-        eq_(q, Question.from_url('/es/questions/%s' % q.id))
-        eq_(q, Question.from_url('/questions/%s' % q.id))
+        eq_(q, Question.from_url('/en-US/questions/{0!s}'.format(q.id)))
+        eq_(q, Question.from_url('/es/questions/{0!s}'.format(q.id)))
+        eq_(q, Question.from_url('/questions/{0!s}'.format(q.id)))
 
     def test_from_url_id_only(self):
         """Verify question returned from valid URL."""
@@ -387,8 +387,8 @@ class QuestionTests(TestCaseBase):
         """Verify question returned from valid URL."""
         q = question(save=True)
 
-        eq_(None, Question.from_url('/en-US/questions/%s/edit' % q.id))
-        eq_(None, Question.from_url('/en-US/kb/%s' % q.id))
+        eq_(None, Question.from_url('/en-US/questions/{0!s}/edit'.format(q.id)))
+        eq_(None, Question.from_url('/en-US/kb/{0!s}'.format(q.id)))
         eq_(None, Question.from_url('/random/url'))
         eq_(None, Question.from_url('/en-US/questions/dashboard/metrics'))
 
@@ -415,9 +415,8 @@ class QuestionTests(TestCaseBase):
         # This test relies on datetime.now() being called in the age
         # property, so this delta check makes it less likely to fail
         # randomly.
-        assert abs(q1.age - 10 * 24 * 60 * 60) < 2, ('q1.age (%s) != 10 days'
-                                                     % q1.age)
-        assert abs(q2.age - 30) < 2, 'q2.age (%s) != 30 seconds' % q2.age
+        assert abs(q1.age - 10 * 24 * 60 * 60) < 2, ('q1.age ({0!s}) != 10 days'.format(q1.age))
+        assert abs(q2.age - 30) < 2, 'q2.age ({0!s}) != 30 seconds'.format(q2.age)
 
     def test_is_taken(self):
         q = question(save=True)

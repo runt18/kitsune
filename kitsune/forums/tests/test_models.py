@@ -22,13 +22,13 @@ class ForumModelTestCase(ForumTestCase):
     def test_forum_absolute_url(self):
         f = forum(save=True)
 
-        eq_('/forums/%s' % f.slug,
+        eq_('/forums/{0!s}'.format(f.slug),
             f.get_absolute_url())
 
     def test_thread_absolute_url(self):
         t = thread(save=True)
 
-        eq_('/forums/%s/%s' % (t.forum.slug, t.id),
+        eq_('/forums/{0!s}/{1!s}'.format(t.forum.slug, t.id),
             t.get_absolute_url())
 
     def test_post_absolute_url(self):
@@ -44,12 +44,12 @@ class ForumModelTestCase(ForumTestCase):
         url = reverse('forums.posts',
                       kwargs={'forum_slug': p1.thread.forum.slug,
                               'thread_id': p1.thread.id})
-        eq_(urlparams(url, hash='post-%s' % p1.id), p1.get_absolute_url())
+        eq_(urlparams(url, hash='post-{0!s}'.format(p1.id)), p1.get_absolute_url())
 
         url = reverse('forums.posts',
                       kwargs={'forum_slug': p2.thread.forum.slug,
                               'thread_id': p2.thread.id})
-        exp_ = urlparams(url, hash='post-%s' % p2.id, page=2)
+        exp_ = urlparams(url, hash='post-{0!s}'.format(p2.id), page=2)
         eq_(exp_, p2.get_absolute_url())
 
     def test_post_page(self):
@@ -85,8 +85,8 @@ class ForumModelTestCase(ForumTestCase):
         url = t.get_last_post_url()
         assert f.slug in url
         assert str(t.id) in url
-        assert '#post-%s' % lp.id in url
-        assert 'last=%s' % lp.id in url
+        assert '#post-{0!s}'.format(lp.id) in url
+        assert 'last={0!s}'.format(lp.id) in url
 
     def test_last_post_updated(self):
         # Adding/Deleting the last post in a thread and forum should
@@ -249,7 +249,7 @@ class SaveDateTestCase(ForumTestCase):
         """Assert that two datetime objects are within `range` (a timedelta).
         """
         diff = abs(a - b)
-        assert diff < abs(delta), msg or '%s ~= %s' % (a, b)
+        assert diff < abs(delta), msg or '{0!s} ~= {1!s}'.format(a, b)
 
     def test_save_thread_no_created(self):
         """Saving a new thread should behave as if auto_add_now was set."""

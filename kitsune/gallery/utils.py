@@ -58,11 +58,11 @@ def check_media_permissions(media, user, perm_type):
 
     """
     media_type = media.__class__.__name__.lower()
-    perm_name = 'gallery.%s_%s' % (perm_type, media_type)
+    perm_name = 'gallery.{0!s}_{1!s}'.format(perm_type, media_type)
     if user != media.creator and not user.has_perm(perm_name):
         raise PermissionDenied
 
 
 def get_draft_title(user):
-    return u'Draft for user %s. Created at: %s' % (user.username,
+    return u'Draft for user {0!s}. Created at: {1!s}'.format(user.username,
                                                    datetime.now())

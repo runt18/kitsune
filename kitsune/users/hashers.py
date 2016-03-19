@@ -17,7 +17,7 @@ class SHA256PasswordHasher(BasePasswordHasher):
         assert salt and '$' not in salt
         hash = hashlib.sha256(
             smart_str(salt) + smart_str(password)).hexdigest()
-        return "%s$%s$%s" % (self.algorithm, salt, hash)
+        return "{0!s}${1!s}${2!s}".format(self.algorithm, salt, hash)
 
     def verify(self, password, encoded):
         algorithm, salt, hash = encoded.split('$', 2)

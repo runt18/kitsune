@@ -160,10 +160,10 @@ def document(request, document_slug, template=None, document=None):
     ga_push = []
     if fallback_reason is not None:
         ga_push.append(['_trackEvent', 'Incomplete L10n', 'Not Localized',
-                        '%s/%s' % (doc.slug, request.LANGUAGE_CODE)])
+                        '{0!s}/{1!s}'.format(doc.slug, request.LANGUAGE_CODE)])
     elif doc.is_outdated():
         ga_push.append(['_trackEvent', 'Incomplete L10n', 'Not Updated',
-                        '%s/%s' % (doc.parent.slug, request.LANGUAGE_CODE)])
+                        '{0!s}/{1!s}'.format(doc.parent.slug, request.LANGUAGE_CODE)])
 
     if document_slug in COLLAPSIBLE_DOCUMENTS.get(request.LANGUAGE_CODE, []):
         document_css_class = 'collapsible'
@@ -171,10 +171,10 @@ def document(request, document_slug, template=None, document=None):
         document_css_class = ''
 
     if request.MOBILE and 'minimal' in request.GET:
-        template = '%sdocument-minimal.html' % template
+        template = '{0!s}document-minimal.html'.format(template)
         minimal = True
     else:
-        template = '%sdocument.html' % template
+        template = '{0!s}document.html'.format(template)
         minimal = False
 
     # Build a set of breadcrumbs, ending with the document's title, and
@@ -294,7 +294,7 @@ def _document_lock_check(document_id):
         return redis.get(key)
     except RedisError as e:
         statsd.incr('redis.errror')
-        log.error('Redis error: %s' % e)
+        log.error('Redis error: {0!s}'.format(e))
         return None
 
 
@@ -312,7 +312,7 @@ def _document_lock_steal(document_id, user_name, expire_time=60 * 15):
         return it_worked
     except RedisError as e:
         statsd.incr('redis.errror')
-        log.error('Redis error: %s' % e)
+        log.error('Redis error: {0!s}'.format(e))
         return False
 
 
@@ -337,7 +337,7 @@ def _document_lock_clear(document_id, user_name):
             return False
     except RedisError as e:
         statsd.incr('redis.errror')
-        log.error('Redis error: %s' % e)
+        log.error('Redis error: {0!s}'.format(e))
         return False
 
 
@@ -1216,8 +1216,7 @@ def delete_revision(request, document_slug, revision_id):
     if only_revision:
         return HttpResponseBadRequest()
 
-    log.warning('User %s is deleting revision with id=%s' %
-                (request.user, revision.id))
+    log.warning('User {0!s} is deleting revision with id={1!s}'.format(request.user, revision.id))
     revision.delete()
     return HttpResponseRedirect(reverse('wiki.document_revisions',
                                         args=[document.slug]))
@@ -1264,8 +1263,7 @@ def delete_document(request, document_slug):
             'document': document})
 
     # Handle confirm delete form POST
-    log.warning('User %s is deleting document: %s (id=%s)' %
-                (request.user, document.title, document.id))
+    log.warning('User {0!s} is deleting document: {1!s} (id={2!s})'.format(request.user, document.title, document.id))
     document.delete()
 
     return render(request, 'wiki/confirm_document_delete.html', {

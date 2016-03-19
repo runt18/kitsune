@@ -92,13 +92,13 @@ def redirect(request, product, version, platform, locale, topic=None):
             'utm_source': 'inproduct'}
         if hasattr(request, 'eu_build'):
             params['eu'] = 1
-        target = u'/%s/%s' % (locale, destination.target.lstrip('/'))
+        target = u'/{0!s}/{1!s}'.format(locale, destination.target.lstrip('/'))
         target = urlparams(target, **params)
 
         # Switch over to HTTPS if we DEBUG=False and sample is active.
         if not settings.DEBUG and waffle.sample_is_active('inproduct-https'):
             domain = Site.objects.get_current().domain
-            target = 'https://%s%s' % (domain, target)
+            target = 'https://{0!s}{1!s}'.format(domain, target)
 
     # 302 because these can change over time.
     return HttpResponseRedirect(target)

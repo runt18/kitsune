@@ -32,8 +32,8 @@ class Command(BaseCommand):
         for f in files:
             if f.endswith('.html'):
                 tpl = f[:-5]
-                cmd = '%s %s > %s' % (
+                cmd = '{0!s} {1!s} > {2!s}'.format(
                     settings.NUNJUCKS_PRECOMPILE_BIN,
                     path('static/sumo/tpl'),
-                    path('static/sumo/js/templates/%s.js' % tpl))
+                    path('static/sumo/js/templates/{0!s}.js'.format(tpl)))
                 subprocess.call(cmd, shell=True)

@@ -344,8 +344,8 @@ def close_account(request):
     profile.save()
 
     # Deactivate the user and change key information
-    request.user.username = 'user%s' % request.user.id
-    request.user.email = '%s@example.com' % request.user.id
+    request.user.username = 'user{0!s}'.format(request.user.id)
+    request.user.email = '{0!s}@example.com'.format(request.user.id)
     request.user.is_active = False
 
     # Remove from all groups
@@ -441,7 +441,7 @@ def edit_watch_list(request):
 
     if request.method == 'POST':
         for w in watch_list:
-            w.is_active = 'watch_%s' % w.id in request.POST
+            w.is_active = 'watch_{0!s}'.format(w.id) in request.POST
             w.save()
 
     return render(request, 'users/edit_watches.html', {

@@ -12,8 +12,8 @@ def image(file_and_save=True, **kwargs):
     if 'creator' not in kwargs:
         u = user(save=True)
 
-    defaults = {'title': 'Some title %s' % str(datetime.now()),
-                'description': 'Some description %s' % str(datetime.now()),
+    defaults = {'title': 'Some title {0!s}'.format(str(datetime.now())),
+                'description': 'Some description {0!s}'.format(str(datetime.now())),
                 'creator': u}
     defaults.update(kwargs)
 

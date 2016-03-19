@@ -50,18 +50,17 @@ class TagWidget(Widget):
 
             # Hidden input for form state:
             if not self.async_urls:
-                output += u'<input%s />' % flatatt({
+                output += u'<input{0!s} />'.format(flatatt({
                     'value': force_unicode(tag.name),
                     'type': 'hidden',
-                    'name': control_name})
+                    'name': control_name}))
 
                 # Linkless tag name:
-                output += (u'<span class="tag-name">%s</span>' %
-                           escape(tag.name))
+                output += (u'<span class="tag-name">{0!s}</span>'.format(
+                           escape(tag.name)))
             else:
                 # Anchor for link to by-tag view:
-                output += (u'<a class="tag-name" href="%s">%s</a>' %
-                           (escape(self.make_link(tag.slug)),
+                output += (u'<a class="tag-name" href="{0!s}">{1!s}</a>'.format(escape(self.make_link(tag.slug)),
                             escape(tag.name)))
 
             # Remove button:
@@ -80,11 +79,11 @@ class TagWidget(Widget):
 
     def render(self, name, value, attrs=None):
         """Render a hidden input for each choice plus a blank text input."""
-        output = u'<div class="tag-adder tags%s"' % (
-            '' if self.read_only or self.async_urls else ' deferred')
+        output = u'<div class="tag-adder tags{0!s}"'.format((
+            '' if self.read_only or self.async_urls else ' deferred'))
         if not self.read_only:
             vocab = [t.name for t in Tag.objects.only('name').all()]
-            output += u' data-tag-vocab-json="%s"' % escape(json.dumps(vocab))
+            output += u' data-tag-vocab-json="{0!s}"'.format(escape(json.dumps(vocab)))
         if self.can_create_tags:
             output += u' data-can-create-tags="1"'
         output += u'>'
@@ -114,12 +113,12 @@ class TagWidget(Widget):
             # the hidden inputs, it should handily work as a JS-less fallback.
             input_attrs = self.build_attrs(attrs, type='text', name=name,
                                            **{'class': 'autocomplete-tags'})
-            output += u'<input%s />' % flatatt(input_attrs)
+            output += u'<input{0!s} />'.format(flatatt(input_attrs))
 
             # Add the Add button:
-            output += u'<input%s />' % flatatt(dict(type='submit',
+            output += u'<input{0!s} />'.format(flatatt(dict(type='submit',
                                                     value=_('Add'),
-                                                    **{'class': 'adder'}))
+                                                    **{'class': 'adder'})))
 
         output += u'</div>'
         return mark_safe(output)

@@ -24,12 +24,12 @@ def main():
         parser.error("-k must be defined")
 
     ctx = {
-        'django': 'cd %s; source virtualenv/bin/activate; %s -W ignore::DeprecationWarning manage.py' % (
+        'django': 'cd {0!s}; source virtualenv/bin/activate; {1!s} -W ignore::DeprecationWarning manage.py'.format(
             opts.kitsune, opts.python),
-        'scripts': 'cd %s; source virtualenv/bin/activate; %s' % (
+        'scripts': 'cd {0!s}; source virtualenv/bin/activate; {1!s}'.format(
             opts.kitsune, opts.python),
     }
-    ctx['cron'] = '%s cron' % ctx['django']
+    ctx['cron'] = '{0!s} cron'.format(ctx['django'])
     # Source the venv, don't mess with manage.py
     ctx['rscripts'] = ctx['scripts']
 
@@ -38,7 +38,7 @@ def main():
             if k == 'rscripts':
                 # rscripts get to run as whatever user is specified in crontab.tpl
                 continue
-            ctx[k] = '%s %s' % (opts.user, v)
+            ctx[k] = '{0!s} {1!s}'.format(opts.user, v)
 
     # Needs to stay below the opts.user injection.
     ctx['python'] = opts.python

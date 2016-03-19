@@ -29,7 +29,7 @@ log = logging.getLogger('k.task')
 def update_question_votes(question_id):
     from kitsune.questions.models import Question
 
-    log.debug('Got a new QuestionVote for question_id=%s.' % question_id)
+    log.debug('Got a new QuestionVote for question_id={0!s}.'.format(question_id))
     statsd.incr('questions.tasks.update')
 
     # Pin to master db to avoid lag delay issues.
@@ -40,7 +40,7 @@ def update_question_votes(question_id):
         q.sync_num_votes_past_week()
         q.save(force_update=True)
     except Question.DoesNotExist:
-        log.info('Question id=%s deleted before task.' % question_id)
+        log.info('Question id={0!s} deleted before task.'.format(question_id))
 
     unpin_this_thread()
 
@@ -51,7 +51,7 @@ def update_question_vote_chunk(data):
     """Update num_votes_past_week for a number of questions."""
 
     # First we recalculate num_votes_past_week in the db.
-    log.info('Calculating past week votes for %s questions.' % len(data))
+    log.info('Calculating past week votes for {0!s} questions.'.format(len(data)))
 
     ids = ','.join(map(str, data))
     sql = """
@@ -62,8 +62,8 @@ def update_question_vote_chunk(data):
             WHERE qv.question_id = q.id
             AND qv.created >= DATE(SUBDATE(NOW(), 7))
         )
-        WHERE q.id IN (%s);
-        """ % ids
+        WHERE q.id IN ({0!s});
+        """.format(ids)
     cursor = connection.cursor()
     cursor.execute(sql)
     transaction.commit_unless_managed()
@@ -75,8 +75,8 @@ def update_question_vote_chunk(data):
         sql = """
             SELECT id, num_votes_past_week
             FROM questions_question
-            WHERE id in (%s);
-            """ % ids
+            WHERE id in ({0!s});
+            """.format(ids)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -109,8 +109,7 @@ def update_question_vote_chunk(data):
 @task(rate_limit='4/m')
 @timeit
 def update_answer_pages(question):
-    log.debug('Recalculating answer page numbers for question %s: %s' %
-              (question.pk, question.title))
+    log.debug('Recalculating answer page numbers for question {0!s}: {1!s}'.format(question.pk, question.title))
 
     i = 0
     answers = question.answers.using('default').order_by('created')

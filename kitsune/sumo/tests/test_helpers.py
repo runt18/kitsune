@@ -125,10 +125,10 @@ class TestDateTimeFormat(TestCase):
         date_today = datetime.today()
         date_localize = self.timezone.localize(date_today)
         value_returned = unicode(datetimeformat(self.context, date_today))
-        value_expected = 'Today at %s' % format_time(date_localize,
+        value_expected = 'Today at {0!s}'.format(format_time(date_localize,
                                                      format='short',
                                                      locale=self.locale,
-                                                     tzinfo=self.timezone)
+                                                     tzinfo=self.timezone))
         eq_(pq(value_returned)('time').text(), value_expected)
 
     def test_locale(self):

@@ -65,7 +65,7 @@ class SendMessageTestCase(TestCase):
         for i in range(53):
             self.client.post(
                 reverse('messages.new', locale='en-US'),
-                {'to': self.user2.username, 'message': 'hi there %s' % i})
+                {'to': self.user2.username, 'message': 'hi there {0!s}'.format(i)})
 
         # Verify only 50 are sent.
         eq_(50, OutboxMessage.objects.filter(sender=self.user1).count())

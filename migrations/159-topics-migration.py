@@ -59,7 +59,7 @@ def run():
         try:
             destination_tag = Tag.objects.get(slug=tags_to_migrate[tag.slug])
         except Tag.DoesNotExist:
-            print 'Skipped tag %s' % tag
+            print 'Skipped tag {0!s}'.format(tag)
             continue
 
         # Get or create the topic.
@@ -70,12 +70,12 @@ def run():
             visible=True)
 
         if created:
-            print 'Created new topic "%s"' % smart_str(topic.slug)
+            print 'Created new topic "{0!s}"'.format(smart_str(topic.slug))
 
         # Assign the topic to all the documents tagged with tag.
         for doc in Document.objects.filter(tags__slug=tag.slug):
             doc.topics.add(topic)
-            print 'Added topic "%s" to document "%s"' % (
+            print 'Added topic "{0!s}" to document "{1!s}"'.format(
                 smart_str(topic.slug), smart_str(doc.title))
 
     print 'Done!'

@@ -76,7 +76,7 @@ class CreateImageAttachmentTestCase(TestCase):
 class FileNameTestCase(TestCase):
     def _match_file_name(self, name, name_end):
         assert name.endswith(name_end), (
-            '"%s" does not end with "%s"' % (name, name_end))
+            '"{0!s}" does not end with "{1!s}"'.format(name, name_end))
 
     def test_empty_file_name(self):
         self._match_file_name('', '')

@@ -29,7 +29,7 @@ def _objects_eq(manager, list_):
 def redirect_rev(title, redirect_to):
     return revision(
         document=document(title=title, save=True),
-        content='REDIRECT [[%s]]' % redirect_to,
+        content='REDIRECT [[{0!s}]]'.format(redirect_to),
         is_approved=True,
         save=True)
 
@@ -282,7 +282,7 @@ class DocumentTests(TestCase):
 
         redirector = revision(
             document=document(title=title2, locale='es', save=True),
-            content=u'REDIRECT [[%s]]' % redirect_to.document.title,
+            content=u'REDIRECT [[{0!s}]]'.format(redirect_to.document.title),
             is_approved=True,
             save=True)
 
@@ -536,7 +536,7 @@ class RevisionTests(TestCase):
         d, _ = doc_rev('Replace document html')
 
         assert 'Replace document html' in d.html, \
-               '"Replace document html" not in %s' % d.html
+               '"Replace document html" not in {0!s}'.format(d.html)
 
         # Creating another approved revision replaces it again
         r = revision(document=d, content='Replace html again',
@@ -544,19 +544,19 @@ class RevisionTests(TestCase):
         r.save()
 
         assert 'Replace html again' in d.html, \
-               '"Replace html again" not in %s' % d.html
+               '"Replace html again" not in {0!s}'.format(d.html)
 
     def test_unapproved_revision_not_updates_html(self):
         """Creating an unapproved revision does not update document.html"""
         d, _ = doc_rev('Here to stay')
 
-        assert 'Here to stay' in d.html, '"Here to stay" not in %s' % d.html
+        assert 'Here to stay' in d.html, '"Here to stay" not in {0!s}'.format(d.html)
 
         # Creating another approved revision keeps initial content
         r = revision(document=d, content='Fail to replace html')
         r.save()
 
-        assert 'Here to stay' in d.html, '"Here to stay" not in %s' % d.html
+        assert 'Here to stay' in d.html, '"Here to stay" not in {0!s}'.format(d.html)
 
     def test_revision_unicode(self):
         """Revision containing unicode characters is saved successfully."""

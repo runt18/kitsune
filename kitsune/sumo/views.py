@@ -136,8 +136,7 @@ def test_memcached(host, port):
         s.connect((host, port))
         return True
     except Exception as exc:
-        log.critical('Failed to connect to memcached (%r): %s' %
-                     ((host, port), exc))
+        log.critical('Failed to connect to memcached ({0!r}): {1!s}'.format((host, port), exc))
         return False
     finally:
         s.close()
@@ -174,7 +173,7 @@ def monitor(request):
                     ip, port = loc.split(':')
                     result = test_memcached(ip, int(port))
                     memcache_results.append(
-                        (INFO, '%s:%s %s' % (ip, port, result)))
+                        (INFO, '{0!s}:{1!s} {2!s}'.format(ip, port, result)))
 
         if not memcache_results:
             memcache_results.append((ERROR, 'memcache is not configured.'))
@@ -189,7 +188,7 @@ def monitor(request):
 
     except Exception as exc:
         memcache_results.append(
-            (ERROR, 'Exception while looking at memcached: %s' % str(exc)))
+            (ERROR, 'Exception while looking at memcached: {0!s}'.format(str(exc))))
 
     status['memcached'] = memcache_results
 
@@ -227,7 +226,7 @@ def monitor(request):
 
         if path_exists and path_perms:
             filepath_results.append(
-                (INFO, '%s: %s %s %s' % (path, path_exists, path_perms,
+                (INFO, '{0!s}: {1!s} {2!s} {3!s}'.format(path, path_exists, path_perms,
                                          notes)))
 
     status['filepaths'] = filepath_results
@@ -241,11 +240,11 @@ def monitor(request):
             (INFO, 'Successfully connected to RabbitMQ.'))
     except (socket.error, IOError) as exc:
         rabbitmq_results.append(
-            (ERROR, 'Error connecting to RabbitMQ: %s' % str(exc)))
+            (ERROR, 'Error connecting to RabbitMQ: {0!s}'.format(str(exc))))
 
     except Exception as exc:
         rabbitmq_results.append(
-            (ERROR, 'Exception while looking at RabbitMQ: %s' % str(exc)))
+            (ERROR, 'Exception while looking at RabbitMQ: {0!s}'.format(str(exc))))
 
     status['RabbitMQ'] = rabbitmq_results
 
@@ -259,11 +258,11 @@ def monitor(request):
 
     except es_utils.ES_EXCEPTIONS as exc:
         es_results.append(
-            (ERROR, 'ElasticSearch problem: %s' % str(exc)))
+            (ERROR, 'ElasticSearch problem: {0!s}'.format(str(exc))))
 
     except Exception as exc:
         es_results.append(
-            (ERROR, 'Exception while looking at ElasticSearch: %s' % str(exc)))
+            (ERROR, 'Exception while looking at ElasticSearch: {0!s}'.format(str(exc))))
 
     status['ElasticSearch'] = es_results
 
@@ -279,9 +278,9 @@ def monitor(request):
         for backend in settings.REDIS_BACKENDS:
             try:
                 redis_client(backend)
-                redis_results.append((INFO, '%s: Pass!' % backend))
+                redis_results.append((INFO, '{0!s}: Pass!'.format(backend)))
             except RedisError:
-                redis_results.append((ERROR, '%s: Fail!' % backend))
+                redis_results.append((ERROR, '{0!s}: Fail!'.format(backend)))
     status['Redis'] = redis_results
 
     status_code = 200

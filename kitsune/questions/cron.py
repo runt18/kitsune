@@ -67,8 +67,8 @@ def auto_archive_old_questions():
         sql = """
             UPDATE questions_question
             SET is_archived = 1
-            WHERE id IN (%s)
-            """ % ','.join(map(str, q_ids))
+            WHERE id IN ({0!s})
+            """.format(','.join(map(str, q_ids)))
 
         cursor = connection.cursor()
         cursor.execute(sql)

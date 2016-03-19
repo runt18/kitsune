@@ -46,7 +46,7 @@ class GoogleAnalyticsTests(TestCase):
         documents = []
         for i in range(1, 6):
             documents.append(revision(
-                document=document(slug='doc-%s' % i, save=True),
+                document=document(slug='doc-{0!s}'.format(i), save=True),
                 is_approved=True,
                 save=True).document)
 

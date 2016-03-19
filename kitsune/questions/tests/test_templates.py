@@ -62,7 +62,7 @@ class AnswersTemplateTestCase(TestCaseBase):
         eq_(content, new_answer.content)
         # Check canonical url
         doc = pq(response.content)
-        eq_('/questions/%s' % self.question.id,
+        eq_('/questions/{0!s}'.format(self.question.id),
             doc('link[rel="canonical"]')[0].attrib['href'])
 
     def test_answer_upload(self):
@@ -82,7 +82,7 @@ class AnswersTemplateTestCase(TestCaseBase):
         eq_(1, new_answer.images.count())
         image = new_answer.images.all()[0]
         name = '098f6b.png'
-        message = 'File name "%s" does not contain "%s"' % (
+        message = 'File name "{0!s}" does not contain "{1!s}"'.format(
             image.file.name, name)
         assert name in image.file.name, message
         eq_(self.user.username, image.creator.username)
@@ -143,7 +143,7 @@ class AnswersTemplateTestCase(TestCaseBase):
         doc = pq(response.content)
         eq_(1, len(doc('div.solution')))
         div = doc('h3.is-solution')[0].getparent().getparent()
-        eq_('answer-%s' % ans.id, div.attrib['id'])
+        eq_('answer-{0!s}'.format(ans.id), div.attrib['id'])
         q = Question.objects.get(pk=self.question.id)
         eq_(q.solution, ans)
         eq_(q.solver, self.question.creator)
@@ -296,7 +296,7 @@ class AnswersTemplateTestCase(TestCaseBase):
                        args=[self.question.id])
         doc = pq(response.content)
 
-        eq_(1, len(doc('#answer-%s h3.is-helpful' % self.answer.id)))
+        eq_(1, len(doc('#answer-{0!s} h3.is-helpful'.format(self.answer.id))))
         eq_(0, len(doc('form.helpful input[name="helpful"]')))
         # Verify user agent
         vote_meta = VoteMetadata.objects.all()[0]
@@ -366,16 +366,14 @@ class AnswersTemplateTestCase(TestCaseBase):
                        args=[self.question.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/questions/%s/delete' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, self.question.id),
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/questions/{2!s}/delete'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, self.question.id),
             redirect[0])
 
         response = post(self.client, 'questions.delete',
                         args=[self.question.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/questions/%s/delete' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, self.question.id),
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/questions/{2!s}/delete'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, self.question.id),
             redirect[0])
 
     def test_delete_question_with_permissions(self):
@@ -413,16 +411,14 @@ class AnswersTemplateTestCase(TestCaseBase):
                        args=[self.question.id, ans.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/questions/%s/delete/%s' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, q.id, ans.id),
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/questions/{2!s}/delete/{3!s}'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, q.id, ans.id),
             redirect[0])
 
         response = post(self.client, 'questions.delete_answer',
                         args=[self.question.id, ans.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/questions/%s/delete/%s' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, q.id, ans.id),
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/questions/{2!s}/delete/{3!s}'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, q.id, ans.id),
             redirect[0])
 
     def test_delete_answer_with_permissions(self):
@@ -502,7 +498,7 @@ class AnswersTemplateTestCase(TestCaseBase):
         doc = pq(response.content)
         eq_(1, len(doc('li.edit')))
         new_answer = self.question.answers.order_by('-id')[0]
-        eq_(1, len(doc('#answer-%s + div li.edit' % new_answer.id)))
+        eq_(1, len(doc('#answer-{0!s} + div li.edit'.format(new_answer.id))))
 
         # Make sure it can be edited
         content = 'New content for answer'
@@ -534,8 +530,7 @@ class AnswersTemplateTestCase(TestCaseBase):
         response = post(self.client, 'questions.lock', args=[q.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/questions/%s/lock' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, q.id), redirect[0])
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/questions/{2!s}/lock'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, q.id), redirect[0])
 
     def test_lock_question_with_permissions_GET(self):
         """Trying to lock a question via HTTP GET."""
@@ -858,10 +853,10 @@ class TaggingViewTestsAsTagger(TestCaseBase):
     def test_add_tag_get_method(self):
         """Assert GETting the add_tag view redirects to the answers page."""
         response = self.client.get(_add_tag_url(self.question.id))
-        url = 'http://testserver%s' % reverse(
+        url = 'http://testserver{0!s}'.format(reverse(
             'questions.details',
             kwargs={'question_id': self.question.id},
-            force_locale=True)
+            force_locale=True))
         self.assertRedirects(response, url)
 
     def test_add_nonexistent_tag(self):
@@ -938,9 +933,9 @@ class TaggingViewTestsAsTagger(TestCaseBase):
         self._assert_redirects_to_question(response, self.question.id)
 
     def _assert_redirects_to_question(self, response, question_id):
-        url = 'http://testserver%s' % reverse(
+        url = 'http://testserver{0!s}'.format(reverse(
             'questions.details', kwargs={'question_id': question_id},
-            force_locale=True)
+            force_locale=True))
         self.assertRedirects(response, url)
 
     # remove_tag_async view:
@@ -1124,7 +1119,7 @@ class QuestionsTemplateTestCase(TestCaseBase):
             eq_(len(expected), len(doc('.questions > section')))
 
             for q in expected:
-                eq_(1, len(doc('.questions > section[id=question-%s]' % q.id)))
+                eq_(1, len(doc('.questions > section[id=question-{0!s}]'.format(q.id))))
 
         # No filtering -> All questions.
         check('all', [q1, q2, q3])
@@ -1135,11 +1130,11 @@ class QuestionsTemplateTestCase(TestCaseBase):
         # Filter on p3 -> No results
         check(p3.slug, [])
         # Filter on p1,p2
-        check('%s,%s' % (p1.slug, p2.slug), [q2, q3])
+        check('{0!s},{1!s}'.format(p1.slug, p2.slug), [q2, q3])
         # Filter on p1,p3
-        check('%s,%s' % (p1.slug, p3.slug), [q2])
+        check('{0!s},{1!s}'.format(p1.slug, p3.slug), [q2])
         # Filter on p2,p3
-        check('%s,%s' % (p2.slug, p3.slug), [q3])
+        check('{0!s},{1!s}'.format(p2.slug, p3.slug), [q3])
 
     def test_topic_filter(self):
         p = product(save=True)
@@ -1163,7 +1158,7 @@ class QuestionsTemplateTestCase(TestCaseBase):
             # eq_(len(expected), len(doc('.questions > section')))
 
             for q in expected:
-                eq_(1, len(doc('.questions > section[id=question-%s]' % q.id)))
+                eq_(1, len(doc('.questions > section[id=question-{0!s}]'.format(q.id))))
 
         # No filtering -> All questions.
         check({}, [q1, q2, q3])
@@ -1197,13 +1192,13 @@ class QuestionsTemplateTestCase(TestCaseBase):
         """Verify we strip html from truncated text."""
         long_str = ''.join(random.choice(letters) for x in xrange(170))
         question(
-            content='<p>%s</p>' % long_str,
+            content='<p>{0!s}</p>'.format(long_str),
             save=True)
         response = self.client.get(reverse('questions.list', args=['all']))
 
         # Verify that the <p> was stripped
         assert '<p class="short-text"><p>' not in response.content
-        assert '<p class="short-text">%s' % long_str[:5] in response.content
+        assert '<p class="short-text">{0!s}'.format(long_str[:5]) in response.content
 
     def test_views(self):
         """Verify the view count is displayed correctly."""
@@ -1276,9 +1271,9 @@ class QuestionEditingTests(TestCaseBase):
         extra_fields = (q.product_config.get('extra_fields', []) +
                         q.category_config.get('extra_fields', []))
         for field in extra_fields:
-            assert (doc('input[name=%s]' % field) or
-                    doc('textarea[name=%s]' % field)), (
-                "The %s field is missing from the edit page." % field)
+            assert (doc('input[name={0!s}]'.format(field)) or
+                    doc('textarea[name={0!s}]'.format(field))), (
+                "The {0!s} field is missing from the edit page.".format(field))
 
     def test_no_extra_fields(self):
         """The edit-question form shouldn't show inappropriate metadata."""
@@ -1302,9 +1297,9 @@ class QuestionEditingTests(TestCaseBase):
                         kwargs={'question_id': q.id})
 
         # Make sure the form redirects and thus appears to succeed:
-        url = 'http://testserver%s' % reverse('questions.details',
+        url = 'http://testserver{0!s}'.format(reverse('questions.details',
                                               kwargs={'question_id': q.id},
-                                              force_locale=True)
+                                              force_locale=True))
         self.assertRedirects(response, url)
 
         # Make sure the static fields, the metadata, and the updated_by field
@@ -1386,7 +1381,7 @@ class AAQTemplateTestCase(TestCaseBase):
         # Make sure question is in questions list
         response = self.client.get(reverse('questions.list', args=['all']))
         doc = pq(response.content)
-        eq_(1, len(doc('#question-%s' % question.id)))
+        eq_(1, len(doc('#question-{0!s}'.format(question.id))))
         # And no email was sent
         eq_(0, len(mail.outbox))
 
@@ -1426,7 +1421,7 @@ class AAQTemplateTestCase(TestCaseBase):
         # Make sure question is not in questions list
         response = self.client.get(reverse('questions.list', args=['all']))
         doc = pq(response.content)
-        eq_(0, len(doc('li#question-%s' % question.id)))
+        eq_(0, len(doc('li#question-{0!s}'.format(question.id))))
         # And no confirmation email was sent (already sent on registration)
         eq_(0, len(mail.outbox))
 

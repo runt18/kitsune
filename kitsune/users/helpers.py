@@ -41,19 +41,19 @@ def profile_avatar(user, size=48):
                   settings.STATIC_URL + settings.DEFAULT_AVATAR)
 
     if avatar.startswith('//'):
-        avatar = 'https:%s' % avatar
+        avatar = 'https:{0!s}'.format(avatar)
 
     if user and hasattr(user, 'email'):
         email_hash = hashlib.md5(force_str(user.email.lower())).hexdigest()
     else:
         email_hash = '00000000000000000000000000000000'
 
-    url = 'https://secure.gravatar.com/avatar/%s?s=%s' % (email_hash, size)
+    url = 'https://secure.gravatar.com/avatar/{0!s}?s={1!s}'.format(email_hash, size)
 
     # If the url doesn't start with http (local dev), don't pass it to
     # to gravatar because it can't use it.
     if avatar.startswith('http'):
-        url = url + '&d=%s' % urllib.quote(avatar)
+        url = url + '&d={0!s}'.format(urllib.quote(avatar))
 
     return url
 
@@ -71,12 +71,12 @@ def display_name(user):
 @register.filter
 def public_email(email):
     """Email address -> publicly displayable email."""
-    return Markup('<span class="email">%s</span>' % unicode_to_html(email))
+    return Markup('<span class="email">{0!s}</span>'.format(unicode_to_html(email)))
 
 
 def unicode_to_html(text):
     """Turns all unicode into html entities, e.g. &#69; -> E."""
-    return ''.join([u'&#%s;' % ord(i) for i in text])
+    return ''.join([u'&#{0!s};'.format(ord(i)) for i in text])
 
 
 @register.function

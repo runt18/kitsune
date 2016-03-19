@@ -35,11 +35,11 @@ log = logging.getLogger('k.task')
 def send_reviewed_notification(revision, document, message):
     """Send notification of review to the revision creator."""
     if revision.reviewer == revision.creator:
-        log.debug('Revision (id=%s) reviewed by creator, skipping email' %
-                  revision.id)
+        log.debug('Revision (id={0!s}) reviewed by creator, skipping email'.format(
+                  revision.id))
         return
 
-    log.debug('Sending reviewed email for revision (id=%s)' % revision.id)
+    log.debug('Sending reviewed email for revision (id={0!s})'.format(revision.id))
 
     url = reverse('wiki.document_revisions', locale=document.locale,
                   args=[document.slug])
@@ -197,7 +197,7 @@ def _rebuild_kb_chunk(data):
     redirects won't be auto-pruned when they're 404s.
 
     """
-    log.info('Rebuilding %s documents.' % len(data))
+    log.info('Rebuilding {0!s} documents.'.format(len(data)))
 
     pin_this_thread()  # Stick to master.
 
@@ -213,7 +213,7 @@ def _rebuild_kb_chunk(data):
             url = document.redirect_url()
             if (url and points_to_document_view(url) and
                     not document.redirect_document()):
-                log.warn('Invalid redirect document: %d' % pk)
+                log.warn('Invalid redirect document: {0:d}'.format(pk))
 
             html = document.parse_and_calculate_links()
             if document.html != html:
@@ -226,15 +226,15 @@ def _rebuild_kb_chunk(data):
             else:
                 statsd.incr('wiki.rebuild_chunk.nochange')
         except Document.DoesNotExist:
-            message = 'Missing document: %d' % pk
+            message = 'Missing document: {0:d}'.format(pk)
         except Revision.DoesNotExist:
-            message = 'Missing revision for document: %d' % pk
+            message = 'Missing revision for document: {0:d}'.format(pk)
         except ValidationError as e:
-            message = 'ValidationError for %d: %s' % (pk, e.messages[0])
+            message = 'ValidationError for {0:d}: {1!s}'.format(pk, e.messages[0])
         except SlugCollision:
-            message = 'SlugCollision: %d' % pk
+            message = 'SlugCollision: {0:d}'.format(pk)
         except TitleCollision:
-            message = 'TitleCollision: %d' % pk
+            message = 'TitleCollision: {0:d}'.format(pk)
 
         if message:
             log.debug(message)
@@ -243,8 +243,8 @@ def _rebuild_kb_chunk(data):
     statsd.timing('wiki.rebuild_chunk', int(round(d * 1000)))
 
     if messages:
-        subject = ('[%s] Exceptions raised in _rebuild_kb_chunk()' %
-                   settings.PLATFORM_NAME)
+        subject = ('[{0!s}] Exceptions raised in _rebuild_kb_chunk()'.format(
+                   settings.PLATFORM_NAME))
         mail_admins(subject=subject, message='\n'.join(messages))
     transaction.commit_unless_managed()
 

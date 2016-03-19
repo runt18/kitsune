@@ -30,5 +30,5 @@ class ApiTests(TestCase):
         url = urlparams(reverse('postcrash.api'), s=slug)
         response = self.client.get(url)
         eq_(200, response.status_code)
-        eq_('https://example.com/kb/%s' % slug, response.content)
+        eq_('https://example.com/kb/{0!s}'.format(slug), response.content)
         eq_('text/plain', response['content-type'])

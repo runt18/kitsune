@@ -219,7 +219,7 @@ class DocumentTests(TestCaseBase):
         # Ordinarily, a document with no approved revisions cannot have HTML,
         # but we shove it in manually here as a shortcut:
         redirect = document(
-            html='<p>REDIRECT <a href="%s">Boo</a></p>' % target_url)
+            html='<p>REDIRECT <a href="{0!s}">Boo</a></p>'.format(target_url))
         redirect.save()
         redirect_url = redirect.get_absolute_url()
         response = self.client.get(redirect_url, follow=True)
@@ -238,7 +238,7 @@ class DocumentTests(TestCaseBase):
         target = document(save=True)
         target_url = target.get_absolute_url()
         redirect = document(
-            html='<p>REDIRECT <a href="%s">Boo</a></p>' % target_url)
+            html='<p>REDIRECT <a href="{0!s}">Boo</a></p>'.format(target_url))
         redirect.save()
         redirect_url = redirect.get_absolute_url()
         response = self.client.get(redirect_url + '?redirect=no')
@@ -413,7 +413,7 @@ class RevisionTests(TestCaseBase):
         response = self.client.get(url)
         eq_(200, response.status_code)
         doc = pq(response.content)
-        eq_('Revision id: %s' % r.id,
+        eq_('Revision id: {0!s}'.format(r.id),
             doc('div.revision-info li:first').text())
         eq_(d.title, doc('h1.title').text())
         eq_(pq(r.content_parsed)('div').text(),
@@ -582,7 +582,7 @@ class NewDocumentTests(TestCaseBase):
         response = self.client.post(reverse('wiki.new_document'), data,
                                     follow=True)
         d = Document.objects.get(title=data['title'])
-        eq_([('http://testserver/en-US/kb/%s/history' % d.slug, 302)],
+        eq_([('http://testserver/en-US/kb/{0!s}/history'.format(d.slug), 302)],
             response.redirect_chain)
         eq_(settings.WIKI_DEFAULT_LANGUAGE, d.locale)
         eq_(data['category'], d.category)
@@ -800,10 +800,10 @@ class NewRevisionTests(TestCaseBase):
         eq_(self.d.current_revision, new_rev.based_on)
 
         if new_rev.based_on is not None:
-            fromfile = u'[%s] %s #%s' % (new_rev.based_on.document.locale,
+            fromfile = u'[{0!s}] {1!s} #{2!s}'.format(new_rev.based_on.document.locale,
                                          new_rev.based_on.document.title,
                                          new_rev.based_on.id)
-            tofile = u'[%s] %s #%s' % (new_rev.document.locale,
+            tofile = u'[{0!s}] {1!s} #{2!s}'.format(new_rev.document.locale,
                                        new_rev.document.title,
                                        new_rev.id)
             diff = clean(''.join(difflib.unified_diff(
@@ -818,7 +818,7 @@ class NewRevisionTests(TestCaseBase):
         eq_(2, len(mail.outbox))
         attrs_eq(
             mail.outbox[0],
-            subject=u'%s is ready for review (%s)' % (
+            subject=u'{0!s} is ready for review ({1!s})'.format(
                 self.d.title, new_rev.creator),
             body=READY_FOR_REVIEW_EMAIL_CONTENT % {
                 'user': self.user.username,
@@ -833,7 +833,7 @@ class NewRevisionTests(TestCaseBase):
             to=['joe@example.com'])
         attrs_eq(
             mail.outbox[1],
-            subject=u'%s was edited by %s' % (
+            subject=u'{0!s} was edited by {1!s}'.format(
                 self.d.title, new_rev.creator),
             body=DOCUMENT_EDITED_EMAIL_CONTENT % {
                 'user': self.user.username,
@@ -1302,10 +1302,10 @@ class ReviewRevisionTests(TestCaseBase):
         reviewed_delay.assert_called_with(r, r.document, 'something')
 
         if r.based_on is not None:
-            fromfile = u'[%s] %s #%s' % (r.document.locale,
+            fromfile = u'[{0!s}] {1!s} #{2!s}'.format(r.document.locale,
                                          r.document.title,
                                          r.document.current_revision.id)
-            tofile = u'[%s] %s #%s' % (r.document.locale,
+            tofile = u'[{0!s}] {1!s} #{2!s}'.format(r.document.locale,
                                        r.document.title,
                                        r.id)
             diff = clean(''.join(difflib.unified_diff(
@@ -1318,10 +1318,10 @@ class ReviewRevisionTests(TestCaseBase):
             approved = r.document.revisions.filter(is_approved=True)
             approved_rev = approved.order_by('-created')[1]
 
-            fromfile = u'[%s] %s #%s' % (r.document.locale,
+            fromfile = u'[{0!s}] {1!s} #{2!s}'.format(r.document.locale,
                                          r.document.title,
                                          approved_rev.id)
-            tofile = u'[%s] %s #%s' % (r.document.locale,
+            tofile = u'[{0!s}] {1!s} #{2!s}'.format(r.document.locale,
                                        r.document.title,
                                        r.id)
 
@@ -1540,7 +1540,7 @@ class ReviewRevisionTests(TestCaseBase):
         eq_('Approved English version:',
             doc('#content-fields h3').eq(0).text())
         rev_message = doc('#content-fields p').eq(0).text()
-        assert 'by %s' % en_revision.creator.username in rev_message
+        assert 'by {0!s}'.format(en_revision.creator.username) in rev_message
 
     def test_review_translation_of_rejected_parent(self):
         """Translate rejected English document a 2nd time.
@@ -2032,7 +2032,7 @@ class TranslateTests(TestCaseBase):
         eq_(200, response.status_code)
         # Get the link to the rev on the right side of the diff:
         to_link = pq(response.content)('.revision-diff h3 a')[1].attrib['href']
-        assert to_link.endswith('/%s' % ready.pk)
+        assert to_link.endswith('/{0!s}'.format(ready.pk))
 
     def test_translate_no_update_based_on(self):
         """Test translating based on a non-current revision."""
@@ -2438,8 +2438,7 @@ class RevisionDeleteTestCase(TestCaseBase):
                        args=[self.d.slug, self.r.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/kb/%s/revision/%s/delete' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, self.d.slug,
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/kb/{2!s}/revision/{3!s}/delete'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, self.d.slug,
                 self.r.id),
             redirect[0])
 
@@ -2447,8 +2446,7 @@ class RevisionDeleteTestCase(TestCaseBase):
                         args=[self.d.slug, self.r.id])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/kb/%s/revision/%s/delete' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL, self.d.slug,
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/kb/{2!s}/revision/{3!s}/delete'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL, self.d.slug,
                 self.r.id),
             redirect[0])
 
@@ -2588,8 +2586,7 @@ class DocumentDeleteTestCase(TestCaseBase):
                        args=[self.document.slug])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/kb/%s/delete' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL,
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/kb/{2!s}/delete'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL,
              self.document.slug),
             redirect[0])
 
@@ -2597,8 +2594,7 @@ class DocumentDeleteTestCase(TestCaseBase):
                         args=[self.document.slug])
         redirect = response.redirect_chain[0]
         eq_(302, redirect[1])
-        eq_('http://testserver/%s%s?next=/en-US/kb/%s/delete' %
-            (settings.LANGUAGE_CODE, settings.LOGIN_URL,
+        eq_('http://testserver/{0!s}{1!s}?next=/en-US/kb/{2!s}/delete'.format(settings.LANGUAGE_CODE, settings.LOGIN_URL,
              self.document.slug),
             redirect[0])
 

@@ -26,7 +26,6 @@ class RenameFileStorage(DjangoStorage):
         count = itertools.count(1)
         while self.exists(name):
             # file_ext includes the dot.
-            name = os.path.join(dir_name, "%s_%s%s" %
-                                (file_root, count.next(), file_ext))
+            name = os.path.join(dir_name, "{0!s}_{1!s}{2!s}".format(file_root, count.next(), file_ext))
 
         return name

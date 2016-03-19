@@ -181,7 +181,7 @@ class Document(NotificationsMixin, ModelBase, BigVocabTaggableMixin,
 
         # Can't save this translation if parent not localizable
         if self.parent and not self.parent.is_localizable:
-            raise ValidationError('"%s": parent "%s" is not localizable.' % (
+            raise ValidationError('"{0!s}": parent "{1!s}" is not localizable.'.format(
                                   unicode(self), unicode(self.parent)))
 
         # Can't make not localizable if it has translations
@@ -434,7 +434,7 @@ class Document(NotificationsMixin, ModelBase, BigVocabTaggableMixin,
             return self.from_url(url)
 
     def __unicode__(self):
-        return '[%s] %s' % (self.locale, self.title)
+        return '[{0!s}] {1!s}'.format(self.locale, self.title)
 
     def allows_vote(self, request):
         """Return whether we should render the vote form for the document."""
@@ -972,7 +972,7 @@ class Revision(ModelBase, SearchMixin):
         return qs.exists()
 
     def __unicode__(self):
-        return u'[%s] %s #%s: %s' % (self.document.locale,
+        return u'[{0!s}] {1!s} #{2!s}: {3!s}'.format(self.document.locale,
                                      self.document.title,
                                      self.id, self.content[:50])
 
@@ -1155,8 +1155,7 @@ class DocumentLink(ModelBase):
         unique_together = ('linked_from', 'linked_to', 'kind')
 
     def __unicode__(self):
-        return (u'<DocumentLink: %s from %r to %r>' %
-                (self.kind, self.linked_from, self.linked_to))
+        return (u'<DocumentLink: {0!s} from {1!r} to {2!r}>'.format(self.kind, self.linked_from, self.linked_to))
 
 
 class DocumentImage(ModelBase):

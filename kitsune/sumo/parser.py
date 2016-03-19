@@ -283,7 +283,7 @@ class WikiParser(Parser):
         if title == '' and hash != '':
             if not text:
                 text = hash.replace('_', ' ')
-            return u'<a href="%s">%s</a>' % (hash, text)
+            return u'<a href="{0!s}">{1!s}</a>'.format(hash, text)
 
         link = _get_wiki_link(title, self.locale)
         extra_a_attr = ''

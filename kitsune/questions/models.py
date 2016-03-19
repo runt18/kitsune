@@ -256,12 +256,12 @@ class Question(ModelBase, BigVocabTaggableMixin, SearchMixin):
         if version in dev_releases or \
            version in product_details.firefox_history_stability_releases or \
            version in product_details.firefox_history_major_releases:
-            to_add.append('Firefox %s' % version)
+            to_add.append('Firefox {0!s}'.format(version))
             tenths = _tenths_version(version)
             if tenths:
-                to_add.append('Firefox %s' % tenths)
+                to_add.append('Firefox {0!s}'.format(tenths))
         elif _has_beta(version, dev_releases):
-            to_add.append('Firefox %s' % version)
+            to_add.append('Firefox {0!s}'.format(version))
             to_add.append('beta')
 
         self.tags.add(*to_add)
@@ -498,7 +498,7 @@ class Question(ModelBase, BigVocabTaggableMixin, SearchMixin):
             return []
 
         # First try to get the results from the cache
-        key = 'questions_question:related_docs:%s' % self.id
+        key = 'questions_question:related_docs:{0!s}'.format(self.id)
         documents = cache.get(key)
         if documents is not None:
             statsd.incr('questions.related_documents.cache.hit')
@@ -538,7 +538,7 @@ class Question(ModelBase, BigVocabTaggableMixin, SearchMixin):
             return []
 
         # First try to get the results from the cache
-        key = 'questions_question:related_questions:%s' % self.id
+        key = 'questions_question:related_questions:{0!s}'.format(self.id)
         questions = cache.get(key)
         if questions is not None:
             statsd.incr('questions.related_questions.cache.hit')
@@ -845,7 +845,7 @@ class QuestionMetaData(ModelBase):
         unique_together = ('question', 'name')
 
     def __unicode__(self):
-        return u'%s: %s' % (self.name, self.value[:50])
+        return u'{0!s}: {1!s}'.format(self.name, self.value[:50])
 
 
 class QuestionVisits(ModelBase):
@@ -935,7 +935,7 @@ class Answer(ModelBase, SearchMixin):
         )
 
     def __unicode__(self):
-        return u'%s: %s' % (self.question.title, self.content[:50])
+        return u'{0!s}: {1!s}'.format(self.question.title, self.content[:50])
 
     @property
     def content_parsed(self):
@@ -1020,7 +1020,7 @@ class Answer(ModelBase, SearchMixin):
         url = reverse('questions.answer_vote',
                       kwargs={'question_id': self.question_id,
                               'answer_id': self.id})
-        return '%s?%s' % (url, 'helpful')
+        return '{0!s}?{1!s}'.format(url, 'helpful')
 
     def get_solution_url(self, watch):
         url = reverse('questions.solve',
@@ -1035,7 +1035,7 @@ class Answer(ModelBase, SearchMixin):
 
         url = reverse('questions.details',
                       kwargs={'question_id': self.question_id})
-        return urlparams(url, hash='answer-%s' % self.id, **query)
+        return urlparams(url, hash='answer-{0!s}'.format(self.id), **query)
 
     @property
     def num_votes(self):
@@ -1210,7 +1210,7 @@ class AnswerMetricsMappingType(SearchMappingType):
         # doesn't change much, so this is probably ok.
         url = reverse('questions.details',
                       kwargs={'question_id': obj_dict['question_id']})
-        d['url'] = urlparams(url, hash='answer-%s' % obj_dict['id'])
+        d['url'] = urlparams(url, hash='answer-{0!s}'.format(obj_dict['id']))
 
         d['indexed_on'] = int(time.time())
 

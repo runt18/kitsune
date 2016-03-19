@@ -42,7 +42,7 @@ class Product(ModelBase):
         ordering = ['display_order']
 
     def __unicode__(self):
-        return u'%s' % self.title
+        return u'{0!s}'.format(self.title)
 
     @property
     def image_url(self):
@@ -53,7 +53,7 @@ class Product(ModelBase):
     def sprite_url(self, retina=True):
         fn = 'logo-sprite-2x.png' if retina else 'logo-sprite.png'
         url = os.path.join(settings.MEDIA_URL, settings.PRODUCT_IMAGE_PATH, fn)
-        return '%s?%s' % (url, self.image_cachebuster)
+        return '{0!s}?{1!s}'.format(url, self.image_cachebuster)
 
     def questions_enabled(self, locale):
         return self.questions_locales.filter(locale=locale).exists()
@@ -140,7 +140,7 @@ class Topic(ModelBase):
         unique_together = ('slug', 'product')
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.product.title, self.title)
+        return u'[{0!s}] {1!s}'.format(self.product.title, self.title)
 
     @property
     def image_url(self):
@@ -208,4 +208,4 @@ class Platform(ModelBase):
     display_order = models.IntegerField()
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return u'{0!s}'.format(self.name)

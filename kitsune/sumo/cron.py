@@ -48,7 +48,7 @@ def send_postatus_errors():
     # If we have errors to send, send them
     if errordata:
         mail_admins(
-            subject='[SUMO] postatus errors %s' % datestamp,
+            subject='[SUMO] postatus errors {0!s}'.format(datestamp),
             message=(
                 'These are the errors in the SUMO postatus file.\n' +
                 'See http://postatus.paas.allizom.org/p/SUMO for details\n' +

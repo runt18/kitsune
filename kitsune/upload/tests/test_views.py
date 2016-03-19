@@ -70,7 +70,7 @@ class UploadImageTestCase(TestCase):
         eq_(90, file['width'])
         eq_(120, file['height'])
         name = '098f6b.png'
-        message = 'Url "%s" does not contain "%s"' % (file['url'], name)
+        message = 'Url "{0!s}" does not contain "{1!s}"'.format(file['url'], name)
         assert (name in file['url']), message
 
         eq_(1, ImageAttachment.objects.count())

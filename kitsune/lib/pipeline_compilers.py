@@ -15,7 +15,7 @@ class BrowserifyCompiler(CompilerBase):
         return re.search(r'\.browserify(\.[a-fA-F0-9]+)?\.js$', path) is not None
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s > %s" % (
+        command = "{0!s} {1!s} {2!s} > {3!s}".format(
             getattr(settings, 'PIPELINE_BROWSERIFY_BINARY', '/usr/bin/env browserify'),
             getattr(settings, 'PIPELINE_BROWSERIFY_ARGUMENTS', ''),
             infile,

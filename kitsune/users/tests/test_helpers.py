@@ -19,26 +19,26 @@ class HelperTestCase(TestCase):
         self.u = user(username=u'testuser', save=True)
 
     def test_profile_url(self):
-        eq_(u'/user/%s' % self.u.username, profile_url(self.u))
+        eq_(u'/user/{0!s}'.format(self.u.username), profile_url(self.u))
 
     def test_profile_avatar_default(self):
         profile(user=self.u)
         email_hash = hashlib.md5(self.u.email.lower()).hexdigest()
-        gravatar_url = 'https://secure.gravatar.com/avatar/%s?s=48' % (
-            email_hash)
+        gravatar_url = 'https://secure.gravatar.com/avatar/{0!s}?s=48'.format((
+            email_hash))
         assert profile_avatar(self.u).startswith(gravatar_url)
 
     def test_profile_avatar_anonymous(self):
         email_hash = '00000000000000000000000000000000'
-        gravatar_url = 'https://secure.gravatar.com/avatar/%s?s=48' % (
-            email_hash)
+        gravatar_url = 'https://secure.gravatar.com/avatar/{0!s}?s=48'.format((
+            email_hash))
         assert profile_avatar(AnonymousUser()).startswith(gravatar_url)
 
     def test_profile_avatar(self):
         profile(user=self.u, avatar='images/foo.png')
         email_hash = hashlib.md5(self.u.email.lower()).hexdigest()
-        gravatar_url = 'https://secure.gravatar.com/avatar/%s?s=48' % (
-            email_hash)
+        gravatar_url = 'https://secure.gravatar.com/avatar/{0!s}?s=48'.format((
+            email_hash))
         assert profile_avatar(self.u).startswith(gravatar_url)
 
     def test_profile_avatar_unicode(self):

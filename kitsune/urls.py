@@ -91,6 +91,6 @@ if settings.DEBUG:
     media_url = settings.MEDIA_URL.lstrip('/').rstrip('/')
     urlpatterns += patterns(
         '',
-        (r'^%s/(?P<path>.*)$' % media_url, 'kitsune.sumo.views.serve_cors',
+        (r'^{0!s}/(?P<path>.*)$'.format(media_url), 'kitsune.sumo.views.serve_cors',
          {'document_root': settings.MEDIA_ROOT}),
     )

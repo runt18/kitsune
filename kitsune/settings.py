@@ -490,7 +490,7 @@ PASSWORD_HASHERS = (
 
 USERNAME_BLACKLIST = path('kitsune', 'configs', 'username-blacklist.txt')
 
-ROOT_URLCONF = '%s.urls' % PROJECT_MODULE
+ROOT_URLCONF = '{0!s}.urls'.format(PROJECT_MODULE)
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates"

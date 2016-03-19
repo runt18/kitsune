@@ -36,7 +36,7 @@ class DocumentAdmin(admin.ModelAdmin):
             if count == 1 else
             'documents, along with their English versions or translations, '
             'were marked as ')
-        self.message_user(request, '%s %s %s.' % (count, phrase, verb))
+        self.message_user(request, '{0!s} {1!s} {2!s}.'.format(count, phrase, verb))
 
     def archive(self, request, queryset):
         """Mark several documents as obsolete."""

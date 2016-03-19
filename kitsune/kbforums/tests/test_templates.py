@@ -168,7 +168,7 @@ class ThreadsTemplateTests(KBForumTestCase):
         doc = pq(response.content)
         last_post_link = doc('ol.threads div.last-post a:not(.username)')[0]
         href = last_post_link.attrib['href']
-        eq_(href.split('#')[1], 'post-%d' % p2.id)
+        eq_(href.split('#')[1], 'post-{0:d}'.format(p2.id))
 
     def test_empty_thread_errors(self):
         """Posting an empty thread shows errors."""

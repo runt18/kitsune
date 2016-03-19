@@ -128,8 +128,7 @@ class TestMappings(unittest.TestCase):
                     # not work for non-trivial dicts.
                     if merged_mapping[key][0] != val:
                         raise es_utils.MappingMergeError(
-                            '%s key different for %s and %s' %
-                            (key, cls_name, merged_mapping[key][1]))
+                            '{0!s} key different for {1!s} and {2!s}'.format(key, cls_name, merged_mapping[key][1]))
 
                     merged_mapping[key][1].append(cls_name)
 

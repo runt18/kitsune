@@ -21,13 +21,13 @@ from kitsune.search.utils import chunked
 
 def read_index(group):
     """Gets the name of the read index for a group."""
-    return (u'%s_%s' % (settings.ES_INDEX_PREFIX,
+    return (u'{0!s}_{1!s}'.format(settings.ES_INDEX_PREFIX,
                         settings.ES_INDEXES[group]))
 
 
 def write_index(group):
     """Gets the name of the write index for a group."""
-    return (u'%s_%s' % (settings.ES_INDEX_PREFIX,
+    return (u'{0!s}_{1!s}'.format(settings.ES_INDEX_PREFIX,
                         settings.ES_WRITE_INDEXES[group]))
 
 
@@ -244,8 +244,8 @@ def delete_index(index):
 def format_time(time_to_go):
     """Returns minutes and seconds string for given time in seconds"""
     if time_to_go < 60:
-        return "%ds" % time_to_go
-    return "%dm %ds" % (time_to_go / 60, time_to_go % 60)
+        return "{0:d}s".format(time_to_go)
+    return "{0:d}m {1:d}s".format(time_to_go / 60, time_to_go % 60)
 
 
 def get_documents(cls, ids):
@@ -751,7 +751,7 @@ def es_status_cmd(checkindex=False, log=log):
                             missing_docs += 1
 
         if missing_docs:
-            print 'There were %d missing_docs' % missing_docs
+            print 'There were {0:d} missing_docs'.format(missing_docs)
 
 
 def es_search_cmd(query, pages=1, log=log):
@@ -769,7 +769,7 @@ def es_search_cmd(query, pages=1, log=log):
     client = LocalizingClient()
 
     output = []
-    output.append('Search for: %s' % query)
+    output.append('Search for: {0!s}'.format(query))
     output.append('')
 
     data = {'q': query, 'format': 'json'}
@@ -782,7 +782,7 @@ def es_search_cmd(query, pages=1, log=log):
         data['page'] = pageno
         resp = client.get(url, data)
         if resp.status_code != 200:
-            output.append('ERROR: %s' % resp.content)
+            output.append('ERROR: {0!s}'.format(resp.content))
             break
 
         else:
@@ -790,7 +790,7 @@ def es_search_cmd(query, pages=1, log=log):
             results = content[u'results']
 
             for mem in results:
-                output.append(u'%4d  %5.2f  %-10s  %-20s' % (
+                output.append(u'{0:4d}  {1:5.2f}  {2:<10!s}  {3:<20!s}'.format(
                               mem['rank'], mem['score'], mem['type'],
                               mem['title']))
 
@@ -827,8 +827,7 @@ def es_verify_cmd(log=log):
                 # work for non-trivial dicts.
                 if merged_mapping[key][0] != val:
                     raise MappingMergeError(
-                        '%s key different for %s and %s' %
-                        (key, cls_name, merged_mapping[key][1]))
+                        '{0!s} key different for {1!s} and {2!s}'.format(key, cls_name, merged_mapping[key][1]))
 
                 merged_mapping[key][1].append(cls_name)
 

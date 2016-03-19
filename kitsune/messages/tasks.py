@@ -20,7 +20,7 @@ log = logging.getLogger('k.task')
 def email_private_message(inbox_message_id):
     """Send notification of a new private message."""
     inbox_message = InboxMessage.objects.get(id=inbox_message_id)
-    log.debug('Sending email for user (%s)' % (inbox_message.to,))
+    log.debug('Sending email for user ({0!s})'.format(inbox_message.to))
 
     user = inbox_message.to
 

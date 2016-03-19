@@ -245,10 +245,10 @@ def question_list(request, template, product_slug):
     # Set the order.
     order_by = ORDER_BY[order][0]
     question_qs = question_qs.order_by(
-        order_by if sort == 'asc' else '-%s' % order_by)
+        order_by if sort == 'asc' else '-{0!s}'.format(order_by))
 
     try:
-        with statsd.timer('questions.view.paginate.%s' % filter_):
+        with statsd.timer('questions.view.paginate.{0!s}'.format(filter_)):
             questions_page = simple_paginate(
                 request, question_qs, per_page=config.QUESTIONS_PER_PAGE)
     except (PageNotAnInteger, EmptyPage):
@@ -1232,8 +1232,7 @@ def delete_question(request, question_id):
     product = question.product_slug
 
     # Handle confirm delete form POST
-    log.warning('User %s is deleting question with id=%s' %
-                (request.user, question.id))
+    log.warning('User {0!s} is deleting question with id={1!s}'.format(request.user, question.id))
     question.delete()
 
     statsd.incr('questions.delete')
@@ -1255,8 +1254,7 @@ def delete_answer(request, question_id, answer_id):
             'answer': answer})
 
     # Handle confirm delete form POST
-    log.warning('User %s is deleting answer with id=%s' %
-                (request.user, answer.id))
+    log.warning('User {0!s} is deleting answer with id={1!s}'.format(request.user, answer.id))
     answer.delete()
 
     statsd.incr('questions.delete_answer')
@@ -1275,8 +1273,7 @@ def lock_question(request, question_id):
         raise PermissionDenied
 
     question.is_locked = not question.is_locked
-    log.info("User %s set is_locked=%s on question with id=%s " %
-             (request.user, question.is_locked, question.id))
+    log.info("User {0!s} set is_locked={1!s} on question with id={2!s} ".format(request.user, question.is_locked, question.id))
     question.save()
 
     if question.is_locked:
@@ -1297,8 +1294,7 @@ def archive_question(request, question_id):
         raise PermissionDenied
 
     question.is_archived = not question.is_archived
-    log.info("User %s set is_archived=%s on question with id=%s " %
-             (request.user, question.is_archived, question.id))
+    log.info("User {0!s} set is_archived={1!s} on question with id={2!s} ".format(request.user, question.is_archived, question.id))
     question.save()
 
     return HttpResponseRedirect(question.get_absolute_url())
@@ -1330,8 +1326,7 @@ def edit_answer(request, question_id, answer_id):
             answer.updated = datetime.now()
             answer_preview = answer
         else:
-            log.warning('User %s is editing answer with id=%s' %
-                        (request.user, answer.id))
+            log.warning('User {0!s} is editing answer with id={1!s}'.format(request.user, answer.id))
             answer.save()
             return HttpResponseRedirect(answer.get_absolute_url())
 
@@ -1700,7 +1695,7 @@ def screen_share(request, question_id):
     message = jingo.render_to_string(request, 'questions/message/screen_share.ltxt', {
         'asker': display_name(question.creator), 'contributor': display_name(request.user)})
 
-    return HttpResponseRedirect('%s?to=%s&message=%s' % (reverse('messages.new'),
+    return HttpResponseRedirect('{0!s}?to={1!s}&message={2!s}'.format(reverse('messages.new'),
                                                          question.creator.username,
                                                          message))
 
@@ -1743,9 +1738,9 @@ def _search_suggestions(request, text, locale, product_slugs):
     results = []
     try:
         # Search for relevant KB documents.
-        query = dict(('%s__match' % field, text)
+        query = dict(('{0!s}__match'.format(field), text)
                      for field in DocumentMappingType.get_query_fields())
-        query.update(dict(('%s__match_phrase' % field, text)
+        query.update(dict(('{0!s}__match_phrase'.format(field), text)
                      for field in DocumentMappingType.get_query_fields()))
         query = es_query_with_analyzer(query, locale)
         filter = F()
@@ -1777,9 +1772,9 @@ def _search_suggestions(request, text, locale, product_slugs):
                 pass
 
         # Search for relevant questions.
-        query = dict(('%s__match' % field, text)
+        query = dict(('{0!s}__match'.format(field), text)
                      for field in QuestionMappingType.get_query_fields())
-        query.update(dict(('%s__match_phrase' % field, text)
+        query.update(dict(('{0!s}__match_phrase'.format(field), text)
                      for field in QuestionMappingType.get_query_fields()))
 
         # Filter questions by language. Questions should be either in English

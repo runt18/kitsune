@@ -16,7 +16,7 @@ class DocumentPermissionMixin(object):
         """Check if the user has the permission on the document."""
 
         # If this is kicking up a KeyError it's probably because you typoed!
-        return getattr(self, '_allows_%s' % action)(user)
+        return getattr(self, '_allows_{0!s}'.format(action))(user)
 
     def _allows_create_revision(self, user):
         """Can the user create a revision for the document?"""
@@ -109,7 +109,7 @@ def _is_leader(locale, user):
     try:
         locale_team = Locale.objects.get(locale=locale)
     except Locale.DoesNotExist:
-        log.warning('Locale not created for %s' % locale)
+        log.warning('Locale not created for {0!s}'.format(locale))
         return False
 
     return user in locale_team.leaders.all()
@@ -125,7 +125,7 @@ def _is_reviewer(locale, user):
     try:
         locale_team = Locale.objects.get(locale=locale)
     except Locale.DoesNotExist:
-        log.warning('Locale not created for %s' % locale)
+        log.warning('Locale not created for {0!s}'.format(locale))
         return False
 
     return user in locale_team.reviewers.all()

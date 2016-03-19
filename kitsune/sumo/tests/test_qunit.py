@@ -28,7 +28,7 @@ class TestQunit(SeleniumTestCase):
 
         # Print number of test groups so it's more likely we notice problems
         # with this test.
-        print 'QUNIT: examining %d test groups...' % len(test_groups)
+        print 'QUNIT: examining {0:d} test groups...'.format(len(test_groups))
 
         # Go through each test group to see status.
         for group in test_groups:
@@ -55,7 +55,7 @@ class TestQunit(SeleniumTestCase):
                 actual = actuals[0].text if len(actuals) else None
                 expect = expects[0].text if len(expects) else None
 
-                print 'QUNIT FAIL: in "%s": %s != %s' % (title, expect, actual)
+                print 'QUNIT FAIL: in "{0!s}": {1!s} != {2!s}'.format(title, expect, actual)
 
         # Assert we had no failures in the tests.
         eq_(total_fails, 0, 'One or more Qunit tests failed; see output for details')

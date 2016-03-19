@@ -26,7 +26,7 @@ class Media(ModelBase):
         unique_together = (('locale', 'title'), ('is_draft', 'creator'))
 
     def __unicode__(self):
-        return '[%s] %s' % (self.locale, self.title)
+        return '[{0!s}] {1!s}'.format(self.locale, self.title)
 
 
 @auto_delete_files

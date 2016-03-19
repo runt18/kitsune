@@ -11,6 +11,6 @@ def run():
     # Get all instances of tags that point at a Document
     tags = TaggedItem.objects.filter(content_type=content_type)
 
-    print 'Deleting %d tags.' % tags.count()
+    print 'Deleting {0:d} tags.'.format(tags.count())
     tags.delete()
     print 'Done!'

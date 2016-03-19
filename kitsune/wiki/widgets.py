@@ -89,8 +89,7 @@ class RadioInputWithHelpText(forms.widgets.RadioInput):
 
     def __unicode__(self):
         label = super(RadioInputWithHelpText, self).__unicode__()
-        return mark_safe('%s<div class="help-text">%s</div>' %
-                         (label, self.choice_help))
+        return mark_safe('{0!s}<div class="help-text">{1!s}</div>'.format(label, self.choice_help))
 
 
 class RadioFieldRendererWithHelpText(forms.widgets.RadioFieldRenderer):
