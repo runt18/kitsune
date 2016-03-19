@@ -37,7 +37,9 @@ def get(client, url, **kwargs):
     return client.get(reverse(url, **kwargs), follow=True)
 
 
-def post(client, url, data={}, **kwargs):
+def post(client, url, data=None, **kwargs):
+    if data is None:
+        data = {}
     return client.post(reverse(url, **kwargs), data, follow=True)
 
 

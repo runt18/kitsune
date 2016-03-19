@@ -306,7 +306,7 @@ class Progress(object):
         sys.stdout.flush()
 
 
-def is_ratelimited(request, name, rate, method=['POST'], skip_if=lambda r: False):
+def is_ratelimited(request, name, rate, method=None, skip_if=lambda r: False):
     """
     Reimplement ``ratelimit.helpers.is_ratelimited``, with sumo-specific details:
 
@@ -314,6 +314,8 @@ def is_ratelimited(request, name, rate, method=['POST'], skip_if=lambda r: False
     * Log times when users are rate limited.
     * Always uses ``user_or_ip`` for the rate limit key.
     """
+    if method is None:
+        method = ['POST']
     if skip_if(request) or request.user.has_perm('sumo.bypass_ratelimit'):
         request.limited = False
     else:

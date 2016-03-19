@@ -163,11 +163,13 @@ class Paginator(object):
 
 @register.function
 @jinja2.contextfunction
-def breadcrumbs(context, items=list(), add_default=True, id=None):
+def breadcrumbs(context, items=None, add_default=True, id=None):
     """
     Show a list of breadcrumbs. If url is None, it won't be a link.
     Accepts: [(url, label)]
     """
+    if items is None:
+        items = list()
     if add_default:
         first_crumb = u'Home'
 

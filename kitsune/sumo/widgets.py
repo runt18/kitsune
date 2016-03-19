@@ -7,7 +7,9 @@ class ImageWidget(forms.FileInput):
     A ImageField Widget that shows a thumbnail.
     """
 
-    def __init__(self, attrs={}):
+    def __init__(self, attrs=None):
+        if attrs is None:
+            attrs = {}
         super(ImageWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
