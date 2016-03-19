@@ -244,8 +244,7 @@ def register_for_indexing(app,
         return receiver(
             signal,
             sender=sender_class,
-            dispatch_uid='%s.%s.elastic.%s' %
-                         (app, sender_class.__name__, signal_name),
+            dispatch_uid='{0!s}.{1!s}.elastic.{2!s}'.format(app, sender_class.__name__, signal_name),
             weak=False)
 
     if m2m:

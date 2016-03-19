@@ -244,8 +244,7 @@ def lock_thread(request, forum_slug, thread_id):
     forum = get_object_or_404(Forum, slug=forum_slug)
     thread = get_object_or_404(Thread, pk=thread_id, forum=forum)
     thread.is_locked = not thread.is_locked
-    log.info("User %s set is_locked=%s on thread with id=%s " %
-             (request.user, thread.is_locked, thread.id))
+    log.info("User {0!s} set is_locked={1!s} on thread with id={2!s} ".format(request.user, thread.is_locked, thread.id))
     thread.save()
 
     return HttpResponseRedirect(
@@ -265,8 +264,7 @@ def sticky_thread(request, forum_slug, thread_id):
     forum = get_object_or_404(Forum, slug=forum_slug)
     thread = get_object_or_404(Thread, pk=thread_id, forum=forum)
     thread.is_sticky = not thread.is_sticky
-    log.info("User %s set is_sticky=%s on thread with id=%s " %
-             (request.user, thread.is_sticky, thread.id))
+    log.info("User {0!s} set is_sticky={1!s} on thread with id={2!s} ".format(request.user, thread.is_sticky, thread.id))
     thread.save()
 
     return HttpResponseRedirect(
@@ -293,8 +291,7 @@ def edit_thread(request, forum_slug, thread_id):
     form = EditThreadForm(request.POST)
 
     if form.is_valid():
-        log.warning('User %s is editing thread with id=%s' %
-                    (request.user, thread.id))
+        log.warning('User {0!s} is editing thread with id={1!s}'.format(request.user, thread.id))
         thread.title = form.cleaned_data['title']
         thread.save()
 
@@ -319,8 +316,7 @@ def delete_thread(request, forum_slug, thread_id):
             'forum': forum, 'thread': thread})
 
     # Handle confirm delete form POST
-    log.warning('User %s is deleting thread with id=%s' %
-                (request.user, thread.id))
+    log.warning('User {0!s} is deleting thread with id={1!s}'.format(request.user, thread.id))
     thread.delete()
 
     statsd.incr('forums.delete_thread')
@@ -354,8 +350,7 @@ def move_thread(request, forum_slug, thread_id):
             has_perm(user, 'forums_forum.thread_move_forum', forum)):
         raise PermissionDenied
 
-    log.warning('User %s is moving thread with id=%s to forum with id=%s' %
-                (user, thread.id, new_forum_id))
+    log.warning('User {0!s} is moving thread with id={1!s} to forum with id={2!s}'.format(user, thread.id, new_forum_id))
     thread.forum = new_forum
     thread.save()
 
@@ -390,8 +385,7 @@ def edit_post(request, forum_slug, thread_id, post_id):
             post.updated = datetime.now()
             post_preview = post
         else:
-            log.warning('User %s is editing post with id=%s' %
-                        (request.user, post.id))
+            log.warning('User {0!s} is editing post with id={1!s}'.format(request.user, post.id))
             post.save()
             return HttpResponseRedirect(post.get_absolute_url())
 
@@ -416,8 +410,7 @@ def delete_post(request, forum_slug, thread_id, post_id):
             'forum': forum, 'thread': thread, 'post': post})
 
     # Handle confirm delete form POST
-    log.warning("User %s is deleting post with id=%s" %
-                (request.user, post.id))
+    log.warning("User {0!s} is deleting post with id={1!s}".format(request.user, post.id))
     post.delete()
 
     statsd.incr('forums.delete_post')

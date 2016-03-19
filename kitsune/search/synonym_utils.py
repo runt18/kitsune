@@ -38,9 +38,9 @@ def parse_synonyms(text):
             continue
         count = line.count('=>')
         if count < 1:
-            errors.append('Syntax error on line %d: No => found.' % i)
+            errors.append('Syntax error on line {0:d}: No => found.'.format(i))
         elif count > 1:
-            errors.append('Syntax error on line %d: Too many => found.' % i)
+            errors.append('Syntax error on line {0:d}: Too many => found.'.format(i))
         else:
             from_words, to_words = [s.strip() for s in line.split('=>')]
             synonyms.add((from_words, to_words))

@@ -36,7 +36,7 @@ def user_access_decorator(redirect_func, redirect_url_func, deny_func=None,
                 # Redirect back here afterwards?
                 if redirect_field:
                     path = urlquote(request.get_full_path())
-                    redirect_url = '%s?%s=%s' % (
+                    redirect_url = '{0!s}?{1!s}={2!s}'.format(
                         redirect_url, redirect_field, path)
 
                 return HttpResponseRedirect(redirect_url)
@@ -142,14 +142,14 @@ def _resolve_lookup((model, lookup, arg_name), view_kwargs):
     """
     value = view_kwargs.get(arg_name)
     if value is None:
-        raise ValueError("Expected kwarg '%s' not found." % arg_name)
+        raise ValueError("Expected kwarg '{0!s}' not found.".format(arg_name))
     if isinstance(model, basestring):
         model_class = get_model(*model.split('.'))
     else:
         model_class = model
     if model_class is None:
-        raise ValueError("The given argument '%s' is not a valid model." %
-                         model)
+        raise ValueError("The given argument '{0!s}' is not a valid model.".format(
+                         model))
     if inspect.isclass(model_class) and not issubclass(model_class, Model):
-        raise ValueError("The argument '%s' needs to be a model." % model)
+        raise ValueError("The argument '{0!s}' needs to be a model.".format(model))
     return get_object_or_404(model_class, **{lookup: value})

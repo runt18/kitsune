@@ -20,4 +20,4 @@ def api(request):
     host = Site.objects.get_current()
     path = sig.get_absolute_url()
     return HttpResponse(
-        u'https://%s%s' % (host, path), content_type='text/plain')
+        u'https://{0!s}{1!s}'.format(host, path), content_type='text/plain')

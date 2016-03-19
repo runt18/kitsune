@@ -51,12 +51,12 @@ def fetch_bugs(params):
 
 
 def fetch_bug_history(bugid):
-    url = BUGZILLA_API_URL + ('/bug/%d/history' % bugid)
+    url = BUGZILLA_API_URL + ('/bug/{0:d}/history'.format(bugid))
     return fetch(url)
 
 
 def fetch_bug_comments(bugid):
-    url = BUGZILLA_API_URL + ('/bug/%d/comment' % bugid)
+    url = BUGZILLA_API_URL + ('/bug/{0:d}/comment'.format(bugid))
     return fetch(url)
 
 
@@ -86,12 +86,12 @@ def print_bugzilla_stats(from_date, to_date):
         creators[creator] = creators.get(creator, 0) + 1
         all_people.add(creator)
 
-    print 'Bugs created: %s' % creation_count
-    print 'Creators: %s' % len(creators)
+    print 'Bugs created: {0!s}'.format(creation_count)
+    print 'Creators: {0!s}'.format(len(creators))
     print ''
     creators = sorted(creators.items(), reverse=True, key=lambda item: item[1])
     for person, count in creators:
-        print ' %34s : %s' % (person[:30].encode('utf-8'), count)
+        print ' {0:34!s} : {1!s}'.format(person[:30].encode('utf-8'), count)
     print ''
 
     # ------------------------------------------------
@@ -171,46 +171,46 @@ def print_bugzilla_stats(from_date, to_date):
             commenters[commenter] = commenters.get(commenter, 0) + 1
             all_people.add(commenter)
 
-    print 'Bugs resolved: %s' % resolved_count
+    print 'Bugs resolved: {0!s}'.format(resolved_count)
     print ''
     for resolution, count in resolved_map.items():
-        print ' %34s : %s' % (resolution, count)
+        print ' {0:34!s} : {1!s}'.format(resolution, count)
 
     print ''
     for title, count in [('Tracebacks', len(traceback_bugs)),
                          ('Research', len(research_bugs)),
                          ('Tracker', len(tracker_bugs))]:
-        print ' %34s : %s' % (title, count)
+        print ' {0:34!s} : {1!s}'.format(title, count)
 
     print ''
-    print 'Research bugs: %s' % len(research_bugs)
+    print 'Research bugs: {0!s}'.format(len(research_bugs))
     print ''
     for bug in research_bugs:
-        print wrap('%s: %s' % (bug['id'], bug['summary']),
+        print wrap('{0!s}: {1!s}'.format(bug['id'], bug['summary']),
                    subsequent='        ')
 
     print ''
-    print 'Tracker bugs: %s' % len(tracker_bugs)
+    print 'Tracker bugs: {0!s}'.format(len(tracker_bugs))
     print ''
     for bug in tracker_bugs:
-        print wrap('%s: %s' % (bug['id'], bug['summary']),
+        print wrap('{0!s}: {1!s}'.format(bug['id'], bug['summary']),
                    subsequent='        ')
 
     print ''
-    print 'Resolvers: %s' % len(resolvers)
+    print 'Resolvers: {0!s}'.format(len(resolvers))
     print ''
     resolvers = sorted(resolvers.items(), reverse=True,
                        key=lambda item: item[1])
     for person, count in resolvers:
-        print ' %34s : %s' % (person[:30].encode('utf-8'), count)
+        print ' {0:34!s} : {1!s}'.format(person[:30].encode('utf-8'), count)
 
     print ''
-    print 'Commenters: %s' % len(commenters)
+    print 'Commenters: {0!s}'.format(len(commenters))
     print ''
     commenters = sorted(commenters.items(), reverse=True,
                         key=lambda item: item[1])
     for person, count in commenters:
-        print ' %34s : %s' % (person[:30].encode('utf-8'), count)
+        print ' {0:34!s} : {1!s}'.format(person[:30].encode('utf-8'), count)
 
 
 def git(*args):
@@ -274,7 +274,7 @@ def print_git_stats(from_date, to_date):
     committers = sorted(
         committers.items(), key=lambda item: item[1], reverse=True)
     for person, count in committers:
-        print '  %20s : %5s  (+%s, -%s, files %s)' % (
+        print '  {0:20!s} : {1:5!s}  (+{2!s}, -{3!s}, files {4!s})'.format(
             person.encode('utf-8'), count,
             changes[person][0], changes[person][1], changes[person][2])
         all_people.add(person)
@@ -294,7 +294,7 @@ def print_all_people():
     people = sorted(all_people, key=lambda a: a.lower())
 
     for person in people:
-        print '    %s' % person.encode('utf-8')
+        print '    {0!s}'.format(person.encode('utf-8'))
 
 
 def print_header(text):
@@ -322,7 +322,7 @@ def main(argv):
         from_date = datetime.date(year, 1, 1)
         to_date = datetime.date(year, 12, 31)
 
-        print_header('Year %s (%s -> %s)' % (year, from_date, to_date))
+        print_header('Year {0!s} ({1!s} -> {2!s})'.format(year, from_date, to_date))
 
     else:
         quarter = int(argv[1])
@@ -333,7 +333,7 @@ def main(argv):
         to_date = datetime.date(
             year, quarter_dates[1][0], quarter_dates[1][1])
 
-        print_header('Quarter %sq%s (%s -> %s)' % (
+        print_header('Quarter {0!s}q{1!s} ({2!s} -> {3!s})'.format(
             year, quarter, from_date, to_date))
 
     # Add 1 day because we do less-than.

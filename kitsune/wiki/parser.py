@@ -90,7 +90,7 @@ def _key_split(matchobj):
 
     """
     keys = [k.strip() for k in matchobj.group(1).split('+')]
-    return ' + '.join(['<span class="key">%s</span>' % key for key in keys])
+    return ' + '.join(['<span class="key">{0!s}</span>'.format(key) for key in keys])
 
 
 PATTERNS = [
@@ -248,7 +248,7 @@ class ForParser(object):
             if tag != '{/for}':
                 i = indexes.next()
                 dehydrations[i] = cls._wiki_to_tag(attrs)
-                token = u'\x07%i\x07' % i
+                token = u'\x07{0:d}\x07'.format(i)
             else:
                 token = u'\x07/sf\x07'
 

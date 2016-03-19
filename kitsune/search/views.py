@@ -108,7 +108,7 @@ def simple_search(request, template=None):
             'advanced': False, 'request': request,
             'search_form': search_form})
         cache_period = settings.SEARCH_CACHE_PERIOD
-        search_['Cache-Control'] = 'max-age=%s' % (cache_period * 60)
+        search_['Cache-Control'] = 'max-age={0!s}'.format((cache_period * 60))
         search_['Expires'] = (
             (datetime.utcnow() + timedelta(minutes=cache_period))
             .strftime(EXPIRES_FMT))
@@ -184,7 +184,7 @@ def simple_search(request, template=None):
 
         # These filters are ternary, they can be either YES, NO, or OFF
         ternary_filters = ('has_helpful', 'is_archived')
-        d = dict(('question_%s' % filter_name,
+        d = dict(('question_{0!s}'.format(filter_name),
                   _ternary_filter(cleaned[filter_name]))
                  for filter_name in ternary_filters if cleaned[filter_name])
         if d:
@@ -253,7 +253,7 @@ def simple_search(request, template=None):
         # we want to search.
         for field in query_fields:
             for query_type in ['match', 'match_phrase']:
-                query['%s__%s' % (field, query_type)] = cleaned_q
+                query['{0!s}__{1!s}'.format(field, query_type)] = cleaned_q
 
         # Transform the query to use locale aware analyzers.
         query = es_utils.es_query_with_analyzer(query, language)
@@ -415,7 +415,7 @@ def simple_search(request, template=None):
     })
     results_ = render(request, template, data)
     cache_period = settings.SEARCH_CACHE_PERIOD
-    results_['Cache-Control'] = 'max-age=%s' % (cache_period * 60)
+    results_['Cache-Control'] = 'max-age={0!s}'.format((cache_period * 60))
     results_['Expires'] = (
         (datetime.utcnow() + timedelta(minutes=cache_period))
         .strftime(EXPIRES_FMT))
@@ -476,7 +476,7 @@ def advanced_search(request, template=None):
             'advanced': True, 'request': request,
             'search_form': search_form})
         cache_period = settings.SEARCH_CACHE_PERIOD
-        search_['Cache-Control'] = 'max-age=%s' % (cache_period * 60)
+        search_['Cache-Control'] = 'max-age={0!s}'.format((cache_period * 60))
         search_['Expires'] = (
             (datetime.utcnow() + timedelta(minutes=cache_period))
             .strftime(EXPIRES_FMT))
@@ -537,7 +537,7 @@ def advanced_search(request, template=None):
         # These filters are ternary, they can be either YES, NO, or OFF
         ternary_filters = ('is_locked', 'is_solved', 'has_answers',
                            'has_helpful', 'is_archived')
-        d = dict(('question_%s' % filter_name,
+        d = dict(('question_{0!s}'.format(filter_name),
                   _ternary_filter(cleaned[filter_name]))
                  for filter_name in ternary_filters if cleaned[filter_name])
         if d:
@@ -712,7 +712,7 @@ def advanced_search(request, template=None):
             # Create a simple_query_search query for every field
             # we want to search.
             for field in query_fields:
-                query['%s__sqs' % field] = cleaned_q
+                query['{0!s}__sqs'.format(field)] = cleaned_q
 
             # Transform the query to use locale aware analyzers.
             query = es_utils.es_query_with_analyzer(query, language)
@@ -879,7 +879,7 @@ def advanced_search(request, template=None):
         'search_form': search_form, })
     results_ = render(request, template, data)
     cache_period = settings.SEARCH_CACHE_PERIOD
-    results_['Cache-Control'] = 'max-age=%s' % (cache_period * 60)
+    results_['Cache-Control'] = 'max-age={0!s}'.format((cache_period * 60))
     results_['Expires'] = (
         (datetime.utcnow() + timedelta(minutes=cache_period))
         .strftime(EXPIRES_FMT))
@@ -901,7 +901,7 @@ def suggestions(request):
     site = Site.objects.get_current()
     locale = locale_or_default(request.LANGUAGE_CODE)
     try:
-        query = dict(('%s__match' % field, term)
+        query = dict(('{0!s}__match'.format(field), term)
                      for field in DocumentMappingType.get_query_fields())
         # Upgrade the query to an analyzer-aware one.
         query = es_utils.es_query_with_analyzer(query, locale)
@@ -912,7 +912,7 @@ def suggestions(request):
                   .values_dict('document_title', 'url')
                   .query(or_=query)[:5])
 
-        query = dict(('%s__match' % field, term)
+        query = dict(('{0!s}__match'.format(field), term)
                      for field in QuestionMappingType.get_query_fields())
         question_s = (QuestionMappingType.search()
                       .filter(question_has_helpful=True)
@@ -926,7 +926,7 @@ def suggestions(request):
         results = []
 
     def urlize(r):
-        return u'https://%s%s' % (site, r['url'])
+        return u'https://{0!s}{1!s}'.format(site, r['url'])
 
     def titleize(r):
         return r.get('document_title', r.get('document_title'))

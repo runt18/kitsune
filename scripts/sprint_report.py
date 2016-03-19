@@ -239,8 +239,8 @@ def sprint_timeline(bugs, sprint):
 
     timeline.sort(key=lambda item: item[0])
     for mem in timeline:
-        print '%s: %s: %s' % (mem[0], mem[1], mem[2])
-        print '    %s -> %s' % (mem[3] if mem[3] else 'unassigned', mem[4])
+        print '{0!s}: {1!s}: {2!s}'.format(mem[0], mem[1], mem[2])
+        print '    {0!s} -> {1!s}'.format(mem[3] if mem[3] else 'unassigned', mem[4])
         print wrap(mem[5])
         print ''
 
@@ -264,7 +264,7 @@ def main(argv):
     print HEADER
 
     print ''
-    print 'Working on %s' % sprint
+    print 'Working on {0!s}'.format(sprint)
     print ''
 
     bugzilla = BugzillaAPI(

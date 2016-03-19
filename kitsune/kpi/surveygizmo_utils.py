@@ -82,7 +82,7 @@ def add_email_to_campaign(survey, email):
                 email=email, user=user, password=password),
             timeout=30)
     except requests.exceptions.Timeout:
-        print 'Timedout adding: %s' % email
+        print 'Timedout adding: {0!s}'.format(email)
 
 
 def get_exit_survey_results(survey, date):

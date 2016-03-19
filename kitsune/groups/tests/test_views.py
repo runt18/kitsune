@@ -172,5 +172,5 @@ class JoinContributorsTests(TestCase):
         eq_(405, r.status_code)
         r = self.client.post(url)
         eq_(302, r.status_code)
-        eq_('http://testserver%s' % next, r['location'])
+        eq_('http://testserver{0!s}'.format(next), r['location'])
         assert self.user.groups.filter(name='Contributors').exists()

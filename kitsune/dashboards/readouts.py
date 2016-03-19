@@ -533,7 +533,7 @@ class Readout(object):
         Return '' if max is None.
 
         """
-        return ' LIMIT %i' % max if max else ''
+        return ' LIMIT {0:d}'.format(max) if max else ''
 
     def get_absolute_url(self, locale, product=None):
         if self.slug in L10N_READOUTS:
@@ -543,7 +543,7 @@ class Readout(object):
             url = reverse('dashboards.contributors_detail',
                           kwargs={'readout_slug': self.slug}, locale=locale)
         else:
-            raise KeyError('This Readout was not found: %s' % self.slug)
+            raise KeyError('This Readout was not found: {0!s}'.format(self.slug))
 
         if product:
             return urlparams(url, product=product.slug)
@@ -691,14 +691,14 @@ class HowToContributeReadout(CategoryReadout):
     title = _lazy(u'How To Contribute')
     slug = 'how-to-contribute'
     details_link_text = _lazy(u'All How To Contribute articles...')
-    where_clause = 'AND engdoc.category=%s ' % HOW_TO_CONTRIBUTE_CATEGORY
+    where_clause = 'AND engdoc.category={0!s} '.format(HOW_TO_CONTRIBUTE_CATEGORY)
 
 
 class AdministrationReadout(CategoryReadout):
     title = _lazy(u'Administration')
     slug = 'administration'
     details_link_text = _lazy(u'All Administration articles...')
-    where_clause = 'AND engdoc.category=%s ' % ADMINISTRATION_CATEGORY
+    where_clause = 'AND engdoc.category={0!s} '.format(ADMINISTRATION_CATEGORY)
 
 
 class MostVisitedTranslationsReadout(MostVisitedDefaultLanguageReadout):
@@ -922,7 +922,7 @@ class UnhelpfulReadout(Readout):
     try:
         hide_readout = redis_client('helpfulvotes').llen(key) == 0
     except RedisError as e:
-        log.error('Redis error: %s' % e)
+        log.error('Redis error: {0!s}'.format(e))
         hide_readout = True
 
     def rows(self, max=None):
@@ -933,7 +933,7 @@ class UnhelpfulReadout(Readout):
             max_get = max or length
             output = redis.lrange(REDIS_KEY, 0, max_get)
         except RedisError as e:
-            log.error('Redis error: %s' % e)
+            log.error('Redis error: {0!s}'.format(e))
             output = []
 
         data = []
@@ -954,8 +954,7 @@ class UnhelpfulReadout(Readout):
             if not doc.count():
                 return None
 
-        helpfulness = Markup('<span title="%+.1f%%">%.1f%%</span>' %
-                             (float(result[3]) * 100, float(result[2]) * 100))
+        helpfulness = Markup('<span title="{0:+.1f}%">{1:.1f}%</span>'.format(float(result[3]) * 100, float(result[2]) * 100))
         return dict(title=result[6].decode('utf-8'),
                     url=reverse('wiki.document_revisions',
                                 args=[unicode(result[5], "utf-8")],

@@ -27,7 +27,7 @@ class CachedAPIView(APIView):
     def _cache_key(self, request):
         params = []
         for key, value in request.GET.items():
-            params.append("%s=%s" % (key, value))
+            params.append("{0!s}={1!s}".format(key, value))
         return u'{viewname}:{params}'.format(
             viewname=self.__class__.__name__,
             params=u':'.join(sorted(params)))
@@ -56,11 +56,11 @@ class SearchClickthroughMetricList(CachedAPIView):
 
     @property
     def searches_kind(self):
-        return 'search clickthroughs:%s:searches' % self.engine
+        return 'search clickthroughs:{0!s}:searches'.format(self.engine)
 
     @property
     def clicks_kind(self):
-        return 'search clickthroughs:%s:clicks' % self.engine
+        return 'search clickthroughs:{0!s}:clicks'.format(self.engine)
 
     def get_objects(self, request):
         """Return all the ratios.

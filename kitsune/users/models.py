@@ -83,7 +83,7 @@ class Profile(ModelBase, SearchMixin):
         try:
             return unicode(self.user)
         except Exception as exc:
-            return unicode('%d (%r)' % (self.pk, exc))
+            return unicode('{0:d} ({1!r})'.format(self.pk, exc))
 
     def get_absolute_url(self):
         return reverse('users.profile', args=[self.user_id])
@@ -329,7 +329,7 @@ class Setting(ModelBase):
         unique_together = (('user', 'name'),)
 
     def __unicode__(self):
-        return u'%s %s:%s' % (self.user, self.name, self.value or u'[none]')
+        return u'{0!s} {1!s}:{2!s}'.format(self.user, self.name, self.value or u'[none]')
 
     @classmethod
     def get_for_user(cls, user, name):
@@ -590,7 +590,7 @@ class RegistrationProfile(models.Model):
         verbose_name_plural = _lazy(u'registration profiles')
 
     def __unicode__(self):
-        return u'Registration information for %s' % self.user
+        return u'Registration information for {0!s}'.format(self.user)
 
     def activation_key_expired(self):
         """
@@ -624,7 +624,7 @@ class EmailChange(models.Model):
     objects = EmailChangeManager()
 
     def __unicode__(self):
-        return u'Change email request to %s for %s' % (self.email, self.user)
+        return u'Change email request to {0!s} for {1!s}'.format(self.email, self.user)
 
 
 class Deactivation(models.Model):
@@ -636,5 +636,5 @@ class Deactivation(models.Model):
     date = models.DateTimeField(default=datetime.now)
 
     def __unicode__(self):
-        return u'%s was deactivated by %s on %s' % (self.user, self.moderator,
+        return u'{0!s} was deactivated by {1!s} on {2!s}'.format(self.user, self.moderator,
                                                     self.date)

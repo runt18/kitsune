@@ -56,7 +56,7 @@ class LocaleURLMiddleware(object):
             full_path = urllib.quote(full_path.encode('utf-8'))
 
             if query_string:
-                full_path = '%s?%s' % (full_path, query_string)
+                full_path = '{0!s}?{1!s}'.format(full_path, query_string)
 
             response = HttpResponseRedirect(full_path)
 
@@ -116,10 +116,10 @@ class PlusToSpaceMiddleware(object):
         if p.search(request.path_info):
             new = p.sub(' ', request.path_info)
             if request.META['QUERY_STRING']:
-                new = u'%s?%s' % (new,
+                new = u'{0!s}?{1!s}'.format(new,
                                   smart_unicode(request.META['QUERY_STRING']))
             if hasattr(request, 'LANGUAGE_CODE'):
-                new = u'/%s%s' % (request.LANGUAGE_CODE, new)
+                new = u'/{0!s}{1!s}'.format(request.LANGUAGE_CODE, new)
             return HttpResponsePermanentRedirect(new)
 
 

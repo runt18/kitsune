@@ -219,7 +219,7 @@ class ThreadsTemplateTests(ForumTestCase):
         doc = pq(response.content)
         last_post_link = doc('ol.threads div.last-post a:not(.username)')[0]
         href = last_post_link.attrib['href']
-        eq_(href.split('#')[1], 'post-%s' % last.id)
+        eq_(href.split('#')[1], 'post-{0!s}'.format(last.id))
 
     def test_empty_thread_errors(self):
         """Posting an empty thread shows errors."""
@@ -299,7 +299,7 @@ class ThreadsTemplateTests(ForumTestCase):
         f = forum(save=True)
 
         response = get(self.client, 'forums.threads', args=[f.slug])
-        eq_('/forums/%s' % f.slug,
+        eq_('/forums/{0!s}'.format(f.slug),
             pq(response.content)('link[rel="canonical"]')[0].attrib['href'])
 
     def test_show_new_thread(self):
@@ -338,7 +338,7 @@ class ForumsTemplateTests(ForumTestCase):
         doc = pq(response.content)
         last_post_link = doc('ol.forums div.last-post a:not(.username)')[0]
         href = last_post_link.attrib['href']
-        eq_(href.split('#')[1], 'post-%s' % p.id)
+        eq_(href.split('#')[1], 'post-{0!s}'.format(p.id))
 
     def test_restricted_is_invisible(self):
         """Forums with restricted view_in permission shouldn't show up."""

@@ -28,10 +28,10 @@ def context_dict(revision, ready_for_l10n=False, revision_approved=False):
     l10n = revision.document.revisions.filter(is_ready_for_localization=True)
     approved = revision.document.revisions.filter(is_approved=True)
     if ready_for_l10n and l10n.count() > 1:
-        fromfile = u'[%s] %s #%s' % (revision.document.locale,
+        fromfile = u'[{0!s}] {1!s} #{2!s}'.format(revision.document.locale,
                                      revision.document.title,
                                      l10n.order_by('-created')[1].id)
-        tofile = u'[%s] %s #%s' % (revision.document.locale,
+        tofile = u'[{0!s}] {1!s} #{2!s}'.format(revision.document.locale,
                                    revision.document.title,
                                    revision.id)
 
@@ -46,8 +46,8 @@ def context_dict(revision, ready_for_l10n=False, revision_approved=False):
         doc = revision.document
         approved_rev = approved.order_by('-created')[1]
 
-        fromfile = u'[%s] %s #%s' % (doc.locale, doc.title, approved_rev.id)
-        tofile = u'[%s] %s #%s' % (doc.locale, doc.title, revision.id)
+        fromfile = u'[{0!s}] {1!s} #{2!s}'.format(doc.locale, doc.title, approved_rev.id)
+        tofile = u'[{0!s}] {1!s} #{2!s}'.format(doc.locale, doc.title, revision.id)
 
         diff = clean(
             u''.join(
@@ -57,10 +57,10 @@ def context_dict(revision, ready_for_l10n=False, revision_approved=False):
                     fromfile=fromfile, tofile=tofile)),
             ALLOWED_TAGS, ALLOWED_ATTRIBUTES)
     elif revision.document.current_revision is not None:
-        fromfile = u'[%s] %s #%s' % (revision.document.locale,
+        fromfile = u'[{0!s}] {1!s} #{2!s}'.format(revision.document.locale,
                                      revision.document.title,
                                      revision.document.current_revision.id)
-        tofile = u'[%s] %s #%s' % (revision.document.locale,
+        tofile = u'[{0!s}] {1!s} #{2!s}'.format(revision.document.locale,
                                    revision.document.title,
                                    revision.id)
 
@@ -94,8 +94,8 @@ class EditDocumentEvent(InstanceEvent):
     def _mails(self, users_and_watches):
         revision = self.revision
         document = revision.document
-        log.debug('Sending edited notification email for document (id=%s)' %
-                  document.id)
+        log.debug('Sending edited notification email for document (id={0!s})'.format(
+                  document.id))
 
         subject = _lazy(u'{title} was edited by {creator}')
         url = reverse('wiki.document_revisions', locale=document.locale,
@@ -207,8 +207,8 @@ class ReviewableRevisionInLocaleEvent(_RevisionConstructor,
     def _mails(self, users_and_watches):
         revision = self.revision
         document = revision.document
-        log.debug('Sending ready for review email for revision (id=%s)' %
-                  revision.id)
+        log.debug('Sending ready for review email for revision (id={0!s})'.format(
+                  revision.id))
         subject = _lazy(u'{title} is ready for review ({creator})')
         url = reverse('wiki.review_revision',
                       locale=document.locale,
@@ -238,8 +238,8 @@ class ReadyRevisionEvent(_RevisionConstructor, _ProductFilter, Event):
         """Send readiness mails."""
         revision = self.revision
         document = revision.document
-        log.debug('Sending ready notifications for revision (id=%s)' %
-                  revision.id)
+        log.debug('Sending ready notifications for revision (id={0!s})'.format(
+                  revision.id))
 
         subject = _lazy(u'{title} has a revision ready for localization')
 
@@ -291,8 +291,8 @@ class ApprovedOrReadyUnion(EventUnion):
         revision = self._revision
         document = revision.document
         is_ready = revision.is_ready_for_localization
-        log.debug('Sending approved/ready notifications for revision (id=%s)' %
-                  revision.id)
+        log.debug('Sending approved/ready notifications for revision (id={0!s})'.format(
+                  revision.id))
 
         # Localize the subject and message with the appropriate
         # context. If there is an error, fall back to English.

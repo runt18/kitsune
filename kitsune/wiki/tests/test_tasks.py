@@ -130,7 +130,7 @@ class ReviewMailTestCase(TestCaseBase):
 
         # Two emails will be sent, one each for the reviewer and the reviewed.
         eq_(2, len(mail.outbox))
-        eq_('Your revision has been approved: %s' % doc.title,
+        eq_('Your revision has been approved: {0!s}'.format(doc.title),
             mail.outbox[0].subject)
         eq_([rev.creator.email], mail.outbox[0].to)
         eq_(REVIEWED_EMAIL_CONTENT % (
@@ -159,7 +159,7 @@ class ReviewMailTestCase(TestCaseBase):
 
         # Two emails will be sent, one each for the reviewer and the reviewed.
         eq_(2, len(mail.outbox))
-        eq_('Your revision has been approved: %s' % doc.title,
+        eq_('Your revision has been approved: {0!s}'.format(doc.title),
             mail.outbox[0].subject)
 
     @mock.patch.object(Site.objects, 'get_current')
@@ -174,7 +174,7 @@ class ReviewMailTestCase(TestCaseBase):
 
         # Two emails will be sent, one each for the reviewer and the reviewed.
         eq_(2, len(mail.outbox))
-        eq_('Your revision has been approved: %s' % doc.title,
+        eq_('Your revision has been approved: {0!s}'.format(doc.title),
             mail.outbox[0].subject)
         assert '&quot;' not in mail.outbox[0].body
         assert '"All about quotes"' in mail.outbox[0].body

@@ -222,7 +222,7 @@ class TestWikiParser(TestCase):
                 'https://youtu.be/oHg5SJYRHA0']
 
         for url in urls:
-            doc = pq(self.p.parse('[[V:%s]]' % url))
+            doc = pq(self.p.parse('[[V:{0!s}]]'.format(url)))
             assert doc('iframe')[0].attrib['src'].startswith(
                 '//www.youtube.com/embed/oHg5SJYRHA0')
 
@@ -559,8 +559,7 @@ class TestWikiImageTags(TestCase):
             img = pq_img(self.p, '[[Image:test.jpg|alt=' + alt_sent + ']]')
 
             is_true = str(img).startswith('<img alt="' + alt_expected + '"')
-            assert is_true, ('Expected "%s", sent "%s"' %
-                             (alt_expected, alt_sent))
+            assert is_true, ('Expected "{0!s}", sent "{1!s}"'.format(alt_expected, alt_sent))
 
     def test_width(self):
         """Image width attribute set."""

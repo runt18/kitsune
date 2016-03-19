@@ -8,4 +8,4 @@ def run():
     if not num:
         print 'There is nothing to update.'
         return
-    print 'Done! Updated %d passwords.' % num
+    print 'Done! Updated {0:d} passwords.'.format(num)

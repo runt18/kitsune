@@ -47,11 +47,11 @@ class SimpleSearchTests(ElasticTestCase):
     def test_headers(self):
         """Verify caching headers of search forms and search results"""
         response = self.client.get(reverse('search'), {'q': 'audio'})
-        eq_('max-age=%s' % (settings.SEARCH_CACHE_PERIOD * 60),
+        eq_('max-age={0!s}'.format((settings.SEARCH_CACHE_PERIOD * 60)),
             response['Cache-Control'])
         assert 'Expires' in response
         response = self.client.get(reverse('search'))
-        eq_('max-age=%s' % (settings.SEARCH_CACHE_PERIOD * 60),
+        eq_('max-age={0!s}'.format((settings.SEARCH_CACHE_PERIOD * 60)),
             response['Cache-Control'])
         assert 'Expires' in response
 

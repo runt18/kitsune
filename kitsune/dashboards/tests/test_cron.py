@@ -162,8 +162,7 @@ class TopUnhelpfulArticlesCronTests(TestCase):
 
         eq_(1, self.redis.llen(self.REDIS_KEY))
         result = self.redis.lrange(self.REDIS_KEY, 0, 1)
-        eq_(u'%d::%.1f::%.1f::%.1f::%.1f::%s::%s' %
-            (r.document.id, 5.0, 0.4, 0.0, 0.0, r.document.slug,
+        eq_(u'{0:d}::{1:.1f}::{2:.1f}::{3:.1f}::{4:.1f}::{5!s}::{6!s}'.format(r.document.id, 5.0, 0.4, 0.0, 0.0, r.document.slug,
              r.document.title),
             result[0].decode('utf-8'))
 
@@ -201,8 +200,7 @@ class TopUnhelpfulArticlesCronTests(TestCase):
 
         eq_(1, self.redis.llen(self.REDIS_KEY))
         result = self.redis.lrange(self.REDIS_KEY, 0, 1)
-        eq_(u'%d::%.1f::%.1f::%.1f::%.1f::%s::%s' %
-            (r.document.id, 5.0, 0.4, 0.2, 0.0, r.document.slug,
+        eq_(u'{0:d}::{1:.1f}::{2:.1f}::{3:.1f}::{4:.1f}::{5!s}::{6!s}'.format(r.document.id, 5.0, 0.4, 0.2, 0.0, r.document.slug,
              r.document.title),
             result[0].decode('utf-8'))
 
@@ -239,9 +237,9 @@ class TopUnhelpfulArticlesCronTests(TestCase):
 
         eq_(3, self.redis.llen(self.REDIS_KEY))
         result = self.redis.lrange(self.REDIS_KEY, 0, 3)
-        assert '%d::%.1f:' % (r2.document.id, 242.0) in result[0]
-        assert '%d::%.1f:' % (r3.document.id, 122.0) in result[1]
-        assert '%d::%.1f:' % (r.document.id, 102.0) in result[2]
+        assert '{0:d}::{1:.1f}:'.format(r2.document.id, 242.0) in result[0]
+        assert '{0:d}::{1:.1f}:'.format(r3.document.id, 122.0) in result[1]
+        assert '{0:d}::{1:.1f}:'.format(r.document.id, 102.0) in result[2]
 
 
 class L10nMetricsTests(TestCase):

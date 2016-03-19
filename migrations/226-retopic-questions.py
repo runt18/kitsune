@@ -20,8 +20,7 @@ def run():
                     }
                 )
                 if created:
-                    print ('Created missing topic %s/%s'
-                           % (product_slug, topic_desc['topic']))
+                    print ('Created missing topic {0!s}/{1!s}'.format(product_slug, topic_desc['topic']))
 
     # Assign all the right new topics to the right old topics.
     for product in Product.objects.all():
@@ -29,6 +28,6 @@ def run():
         for topic in topics:
             questions = Question.objects.filter(products=product,
                                                 old_topics__slug=topic.slug)
-            print '%s / %s (%d questions)' % (product.title, topic.title, len(questions))
+            print '{0!s} / {1!s} ({2:d} questions)'.format(product.title, topic.title, len(questions))
             for q in questions:
                 q.topics.add(topic)

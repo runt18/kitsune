@@ -267,8 +267,7 @@ def datetimeformat(context, value, format='shortdatetime'):
         # Unknown format
         raise DateTimeFormatError
 
-    return jinja2.Markup('<time datetime="%s">%s</time>' %
-                         (convert_value.isoformat(), formatted))
+    return jinja2.Markup('<time datetime="{0!s}">{1!s}</time>'.format(convert_value.isoformat(), formatted))
 
 
 _whitespace_then_break = re.compile(r'[\r\n\t ]+[\r\n]+')

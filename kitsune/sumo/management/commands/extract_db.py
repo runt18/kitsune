@@ -57,7 +57,7 @@ class Command(BaseCommand):
                     for i in range(len(attrs)):
                         msg = {
                             'id': strip_whitespace(item[i]),
-                            'context': 'DB: %s.%s.%s' % (app, model, attrs[i]),
+                            'context': 'DB: {0!s}.{1!s}.{2!s}'.format(app, model, attrs[i]),
                             'comments': params.get('comments')}
                         strings.append(msg)
 

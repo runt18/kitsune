@@ -44,7 +44,7 @@ class RegisterTests(TestCase):
         eq_(1, len(mail.outbox))
         assert mail.outbox[0].subject.find('Please confirm your') == 0
         key = RegistrationProfile.objects.all()[0].activation_key
-        assert mail.outbox[0].body.find('activate/%s/%s' % (u.id, key)) > 0
+        assert mail.outbox[0].body.find('activate/{0!s}/{1!s}'.format(u.id, key)) > 0
 
         # By default, users aren't added to any groups
         eq_(0, len(u.groups.all()))
@@ -328,7 +328,7 @@ class ChangeEmailTestCase(TestCase):
                                            args=[ec.activation_key]))
         eq_(200, response.status_code)
         doc = pq(response.content)
-        eq_('Unable to change email for user %s' % self.u.username,
+        eq_('Unable to change email for user {0!s}'.format(self.u.username),
             doc('article h1').text())
         u = User.objects.get(username=self.u.username)
         eq_(old_email, u.email)

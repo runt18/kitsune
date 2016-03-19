@@ -58,5 +58,5 @@ class Metric(ModelBase):
         unique_together = [('kind', 'start', 'end')]
 
     def __unicode__(self):
-        return '%s (%s thru %s): %s' % (
+        return '{0!s} ({1!s} thru {2!s}): {3!s}'.format(
             self.kind, self.start, self.end, self.value)

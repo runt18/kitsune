@@ -55,17 +55,17 @@ def handle_delete(request):
 
     # Rule 1: Has to start with the ES_INDEX_PREFIX.
     if not index_to_delete.startswith(settings.ES_INDEX_PREFIX):
-        raise DeleteError('"%s" is not a valid index name.' % index_to_delete)
+        raise DeleteError('"{0!s}" is not a valid index name.'.format(index_to_delete))
 
     # Rule 2: Must be an existing index.
     if index_to_delete not in es_indexes:
-        raise DeleteError('"%s" does not exist.' % index_to_delete)
+        raise DeleteError('"{0!s}" does not exist.'.format(index_to_delete))
 
     # Rule 3: Don't delete the default read index.
     # TODO: When the critical index exists, this should be "Don't
     # delete the critical read index."
     if index_to_delete == read_index('default'):
-        raise DeleteError('"%s" is the default read index.' % index_to_delete)
+        raise DeleteError('"{0!s}" is the default read index.'.format(index_to_delete))
 
     # The index is ok to delete
     delete_index(index_to_delete)
@@ -90,7 +90,7 @@ def reindex_with_scoreboard(mapping_type_names):
         client = redis_client('default')
         val = client.get(OUTSTANDING_INDEX_CHUNKS)
         if val is not None and int(val) > 0:
-            raise ReindexError('There are %s outstanding chunks.' % val)
+            raise ReindexError('There are {0!s} outstanding chunks.'.format(val))
 
         # We don't know how many chunks we're building, but we do want
         # to make sure another reindex request doesn't slide in here
@@ -168,25 +168,25 @@ def search(request):
         try:
             return handle_reset(request)
         except ReindexError as e:
-            error_messages.append(u'Error: %s' % e.message)
+            error_messages.append(u'Error: {0!s}'.format(e.message))
 
     if 'reindex' in request.POST:
         try:
             return handle_reindex(request)
         except ReindexError as e:
-            error_messages.append(u'Error: %s' % e.message)
+            error_messages.append(u'Error: {0!s}'.format(e.message))
 
     if 'recreate_index' in request.POST:
         try:
             return handle_recreate_index(request)
         except ReindexError as e:
-            error_messages.append(u'Error: %s' % e.message)
+            error_messages.append(u'Error: {0!s}'.format(e.message))
 
     if 'delete_index' in request.POST:
         try:
             return handle_delete(request)
         except DeleteError as e:
-            error_messages.append(u'Error: %s' % e.message)
+            error_messages.append(u'Error: {0!s}'.format(e.message))
         except ES_EXCEPTIONS as e:
             error_messages.append('Error: {0}'.format(repr(e)))
 

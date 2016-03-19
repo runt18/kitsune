@@ -45,8 +45,8 @@ def version(**kwargs):
     v = randint(0, 1000)
 
     defaults = {
-        'name': 'Version %d.0' % v,
-        'slug': 'v%d' % v,
+        'name': 'Version {0:d}.0'.format(v),
+        'slug': 'v{0:d}'.format(v),
         'min_version': v,
         'max_version': v + 1,
         'visible': True,
@@ -66,8 +66,8 @@ def platform(**kwargs):
     v = randint(0, 1000)
 
     defaults = {
-        'name': 'Platform %d' % v,
-        'slug': 'platform%d' % v,
+        'name': 'Platform {0:d}'.format(v),
+        'slug': 'platform{0:d}'.format(v),
         'visible': True,
         'display_order': 0,
     }

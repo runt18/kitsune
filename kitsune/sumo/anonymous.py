@@ -68,7 +68,7 @@ class AnonymousIdentity(object):
             pid = 1
 
         md5 = hashlib.md5()
-        md5.update('%s%s%s%s' % (
+        md5.update('{0!s}{1!s}{2!s}{3!s}'.format(
             randrange(0, MAX_ANONYMOUS_ID),
             pid, time.time(), settings.SECRET_KEY))
         return md5.hexdigest()

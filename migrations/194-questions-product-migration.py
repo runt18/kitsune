@@ -12,7 +12,7 @@ tags_to_migrate = {
 
 
 def assert_equals(a, b):
-    assert a == b, '%s != %s' % (a, b)
+    assert a == b, '{0!s} != {1!s}'.format(a, b)
 
 
 def run():
@@ -31,13 +31,13 @@ def run():
             n = 5000
             qs = Question.objects.filter(tags__slug=tag.slug)
             count = qs.count()
-            print '%s %s questions to work on...' % (count, product_slug)
+            print '{0!s} {1!s} questions to work on...'.format(count, product_slug)
             for i in range(0, count, n):
                 for question in qs[i:i + n]:
                     question.products.add(product)
 
-                    print 'Added product "%s" to question "%s"' % (
+                    print 'Added product "{0!s}" to question "{1!s}"'.format(
                         smart_str(product.slug), smart_str(question.title))
                     total_affected += 1
 
-    print 'Done! (%d)' % total_affected
+    print 'Done! ({0:d})'.format(total_affected)

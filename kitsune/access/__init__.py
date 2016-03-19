@@ -12,8 +12,8 @@ def has_perm_or_owns(user, perm, obj, perm_obj,
     if user.is_anonymous():
         return False
 
-    if hasattr(obj, '%s_id' % field_name):
-        if getattr(obj, '%s_id' % field_name) == user.pk:
+    if hasattr(obj, '{0!s}_id'.format(field_name)):
+        if getattr(obj, '{0!s}_id'.format(field_name)) == user.pk:
             return True
     elif user == getattr(obj, field_name):
         return True

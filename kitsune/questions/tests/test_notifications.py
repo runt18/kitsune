@@ -137,10 +137,10 @@ class NotificationsTests(TestCaseBase):
         # Make sure 'before' values are the reverse.
         if turn_on:
             assert not event_cls.is_notifying(user, q), (
-                '%s should not be notifying.' % event_cls.__name__)
+                '{0!s} should not be notifying.'.format(event_cls.__name__))
         else:
             assert event_cls.is_notifying(user, q), (
-                '%s should be notifying.' % event_cls.__name__)
+                '{0!s} should be notifying.'.format(event_cls.__name__))
 
         url = 'questions.watch' if turn_on else 'questions.unwatch'
         data = {'event_type': event_type} if turn_on else {}
@@ -148,10 +148,10 @@ class NotificationsTests(TestCaseBase):
 
         if turn_on:
             assert event_cls.is_notifying(user, q), (
-                '%s should be notifying.' % event_cls.__name__)
+                '{0!s} should be notifying.'.format(event_cls.__name__))
         else:
             assert not event_cls.is_notifying(user, q), (
-                '%s should not be notifying.' % event_cls.__name__)
+                '{0!s} should not be notifying.'.format(event_cls.__name__))
         return q
 
     @mock.patch.object(Site.objects, 'get_current')

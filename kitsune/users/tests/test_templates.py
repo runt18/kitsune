@@ -194,7 +194,7 @@ class PasswordResetTests(TestCaseBase):
         eq_('http://testserver/en-US/users/pwresetsent', r['location'])
         eq_(1, len(mail.outbox))
         assert mail.outbox[0].subject.find('Password reset') == 0
-        assert mail.outbox[0].body.find('pwreset/%s' % self.uidb36) > 0
+        assert mail.outbox[0].body.find('pwreset/{0!s}'.format(self.uidb36)) > 0
 
     @mock.patch.object(PasswordResetForm, 'save')
     def test_smtp_error(self, pwform_save):
@@ -412,7 +412,7 @@ class ViewProfileTests(TestCaseBase):
         # No name set => no optional fields.
         eq_(0, doc('.contact').length)
         # Check canonical url
-        eq_('/user/%s' % self.u.username,
+        eq_('/user/{0!s}'.format(self.u.username),
             doc('link[rel="canonical"]')[0].attrib['href'])
 
     def test_view_profile_mine(self):
@@ -639,6 +639,6 @@ class EditWatchListTests(TestCaseBase):
         eq_(w.is_active, False)
 
         self.client.post(reverse('users.edit_watch_list'), {
-            'watch_%s' % w.id: '1'})
+            'watch_{0!s}'.format(w.id): '1'})
         w = Watch.objects.get(object_id=self.question.id, user=self.user)
         eq_(w.is_active, True)

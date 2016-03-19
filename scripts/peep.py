@@ -135,7 +135,7 @@ class DownloadError(Exception):
         self.reason = str(exc)
 
     def __str__(self):
-        return 'Downloading %s failed: %s' % (self.link, self.reason)
+        return 'Downloading {0!s} failed: {1!s}'.format(self.link, self.reason)
 
 
 def encoded_hash(sha):
@@ -535,9 +535,9 @@ class DownloadedReq(object):
                         break
                     yield chunk
 
-            print('Downloading %s%s...' % (
+            print('Downloading {0!s}{1!s}...'.format(
                 self._req.req,
-                (' (%sK)' % (size / 1000)) if size > 1000 else ''))
+                (' ({0!s}K)'.format((size / 1000))) if size > 1000 else ''))
             progress_indicator = (DownloadProgressBar(max=size).iter if size
                                   else DownloadProgressSpinner().iter)
             with open(path, 'wb') as file:
@@ -607,8 +607,7 @@ class DownloadedReq(object):
                     "etc." % (self._req, link.url))
         else:
             raise UnsupportedRequirementError(
-                "%s: couldn't determine where to download this requirement from."
-                % (self._req,))
+                "{0!s}: couldn't determine where to download this requirement from.".format(self._req))
 
     def install(self):
         """Install the package I represent, without dependencies.
@@ -691,7 +690,7 @@ class MalformedReq(DownloadedReq):
         return 'The following requirements could not be processed:\n'
 
     def error(self):
-        return '* Unable to determine package name from URL %s; add #egg=' % self._url()
+        return '* Unable to determine package name from URL {0!s}; add #egg='.format(self._url())
 
 
 class MissingReq(DownloadedReq):
@@ -709,8 +708,8 @@ class MissingReq(DownloadedReq):
             # MalformedRequest.
             line = self._url()
         else:
-            line = '%s==%s' % (self._name(), self._version())
-        return '# sha256: %s\n%s\n' % (self._actual_hash(), line)
+            line = '{0!s}=={1!s}'.format(self._name(), self._version())
+        return '# sha256: {0!s}\n{1!s}\n'.format(self._actual_hash(), line)
 
 
 class MismatchedReq(DownloadedReq):
@@ -722,11 +721,11 @@ class MismatchedReq(DownloadedReq):
                 "freak out, because someone has tampered with the packages.\n\n")
 
     def error(self):
-        preamble = '    %s: expected' % self._project_name()
+        preamble = '    {0!s}: expected'.format(self._project_name())
         if len(self._expected_hashes()) > 1:
             preamble += ' one of'
         padding = '\n' + ' ' * (len(preamble) + 1)
-        return '%s %s\n%s got %s' % (preamble,
+        return '{0!s} {1!s}\n{2!s} got {3!s}'.format(preamble,
                                      padding.join(self._expected_hashes()),
                                      ' ' * (len(preamble) - 4),
                                      self._actual_hash())
@@ -746,7 +745,7 @@ class SatisfiedReq(DownloadedReq):
                 "safe. If not, uninstall them, then re-attempt your install with peep.\n")
 
     def error(self):
-        return '   %s' % (self._req,)
+        return '   {0!s}'.format(self._req)
 
 
 class InstallableReq(DownloadedReq):

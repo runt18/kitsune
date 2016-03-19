@@ -24,7 +24,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'kitsune.settings_local'
 def update_code(ctx, tag):
     with ctx.lcd(settings.SRC_DIR):
         ctx.local("git fetch")
-        ctx.local("git checkout -f %s" % tag)
+        ctx.local("git checkout -f {0!s}".format(tag))
         ctx.local("find -name '*.pyc' -delete")
 
 
@@ -63,9 +63,8 @@ def db_migrations(ctx):
 @task
 def install_cron(ctx):
     with ctx.lcd(settings.SRC_DIR):
-        ctx.local("python2.7 ./scripts/crontab/gen-crons.py -k %s -u apache > /etc/cron.d/.%s" %
-                  (settings.WWW_DIR, settings.CRON_NAME))
-        ctx.local("mv /etc/cron.d/.%s /etc/cron.d/%s" % (settings.CRON_NAME, settings.CRON_NAME))
+        ctx.local("python2.7 ./scripts/crontab/gen-crons.py -k {0!s} -u apache > /etc/cron.d/.{1!s}".format(settings.WWW_DIR, settings.CRON_NAME))
+        ctx.local("mv /etc/cron.d/.{0!s} /etc/cron.d/{1!s}".format(settings.CRON_NAME, settings.CRON_NAME))
 
 
 @task
@@ -88,7 +87,7 @@ def deploy_app(ctx):
 @hostgroups(settings.CELERY_HOSTGROUP, remote_kwargs={'ssh_key': settings.SSH_KEY})
 def update_celery(ctx):
     ctx.remote(settings.REMOTE_UPDATE_SCRIPT)
-    ctx.remote('/sbin/service %s restart' % settings.CELERY_SERVICE)
+    ctx.remote('/sbin/service {0!s} restart'.format(settings.CELERY_SERVICE))
 
 
 @task

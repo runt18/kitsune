@@ -68,11 +68,11 @@ def collect_tweets():
         try:
             latest_tweet = Tweet.latest()
         except Tweet.DoesNotExist:
-            log.debug('No existing tweets. Retrieving %d tweets from search.' %
-                      settings.CC_TWEETS_PERPAGE)
+            log.debug('No existing tweets. Retrieving {0:d} tweets from search.'.format(
+                      settings.CC_TWEETS_PERPAGE))
         else:
             search_options['since_id'] = latest_tweet.tweet_id
-            log.info('Retrieving tweets with id >= %s' % latest_tweet.tweet_id)
+            log.info('Retrieving tweets with id >= {0!s}'.format(latest_tweet.tweet_id))
 
         # Retrieve Tweets
         results = t.search(**search_options)
@@ -271,6 +271,6 @@ def get_customercare_stats():
         redis.set(key, json.dumps(contributor_stats))
     except RedisError as e:
         statsd.incr('redis.error')
-        log.error('Redis error: %s' % e)
+        log.error('Redis error: {0!s}'.format(e))
 
     return contributor_stats

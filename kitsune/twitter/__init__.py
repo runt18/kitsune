@@ -25,7 +25,7 @@ def url(request, override=None):
     if override:
         d.update(override)
 
-    return u'%s://%s%s' % (d['scheme'], d['host'], d['path'])
+    return u'{0!s}://{1!s}{2!s}'.format(d['scheme'], d['host'], d['path'])
 
 
 def auth_wanted(view_func):

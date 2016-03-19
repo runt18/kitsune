@@ -85,7 +85,7 @@ class ThreadTests(KBForumTestCase):
         def check(url):
             response = get(self.client, url, args=[doc.slug])
             st = response.status_code
-            eq_(404, st, '%s was %s, not 404' % (url, st))
+            eq_(404, st, '{0!s} was {1!s}, not 404'.format(url, st))
         check('wiki.discuss.threads')
         check('wiki.discuss.new_thread')
         check('wiki.discuss.threads.feed')

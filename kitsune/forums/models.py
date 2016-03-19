@@ -170,7 +170,7 @@ class Thread(NotificationsMixin, ModelBase, SearchMixin):
         if page > 1:
             query['page'] = page
         url = reverse('forums.posts', args=[self.forum.slug, self.id])
-        return urlparams(url, hash='post-%s' % self.last_post_id, **query)
+        return urlparams(url, hash='post-{0!s}'.format(self.last_post_id), **query)
 
     def save(self, *args, **kwargs):
         super(Thread, self).save(*args, **kwargs)
@@ -358,7 +358,7 @@ class Post(ModelBase):
             query = {'page': self.page}
 
         url_ = self.thread.get_absolute_url()
-        return urlparams(url_, hash='post-%s' % self.id, **query)
+        return urlparams(url_, hash='post-{0!s}'.format(self.id), **query)
 
     @property
     def content_parsed(self):

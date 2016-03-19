@@ -28,7 +28,7 @@ class Topic(ModelBase):
         ordering = ['display_order']
 
     def __unicode__(self):
-        return u'%s' % self.title
+        return u'{0!s}'.format(self.title)
 
     @property
     def image_url(self):
